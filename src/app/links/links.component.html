@@ -1,0 +1,29 @@
+<h1>Link List</h1>
+<div>
+  <button *ngIf="isLoggedIn" id="addLink" class="btn buttonSuccess addButton" routerLink="add-new-link" routerLinkActive="active">Add Link</button>
+</div>
+<br>
+<div style="overflow-x:auto;">
+    <table>
+      
+        <tr>
+          <th>Title</th>
+          <th>Posted By</th>
+          <th>Link</th>
+          <th>Date</th>
+          <th *ngIf="isLoggedIn">Actions</th>
+        </tr>
+      
+        <tr *ngFor="let link of links$">
+          <td scope="row">&nbsp;{{link.title}}</td>
+          <td>{{link.postby}}</td>
+          <td>{{link.website}}</td>
+          <td>&nbsp;{{link.date}}</td>
+          <td *ngIf="isLoggedIn">
+            <button class="btn buttonPrimary" [routerLink]="['add-new-link', link.id]">Edit</button> &nbsp; &nbsp;
+            <button class="btn buttonDanger" (click)="deleteLink(link.id)">Delete</button>
+          </td>
+        </tr>
+      
+    </table>
+</div>

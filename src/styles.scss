@@ -1,1 +1,217 @@
 /* You can add global styles to this file, and also import other style files */
+:root {
+    --primary-color: #3c5be7da;
+    --background-color: rgba(255, 255, 255, 0.753);
+    --text-color:white;
+  }
+
+.alert-danger { 
+    color: red;
+}
+
+body {
+    background-color: var(--background-color);
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    font-family: 'Segoe UI';
+    overflow: hidden;
+}
+  
+:host {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+}
+
+input{
+    color: #333;
+    font-size: 1rem;
+    margin: 0 auto;
+    border-radius: 0.2rem;
+    background-color: rgb(255, 255, 255);
+    border: none;
+    width: 90%;
+    height: 25px;
+    border-bottom: 0.3rem solid transparent;
+    transition: all 0.3s;
+}
+
+.btn{
+    display: inline-block;
+    font-weight: 400;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    user-select: none;
+    border: 1px solid transparent;
+    padding: .375rem .75rem;
+    font-size: 0.7rem;
+    line-height: 1;
+    border-radius: .25rem;
+    cursor: pointer;
+}
+
+.buttonPrimary {
+    color: #fff;
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.buttonDanger {
+    color: #fff;
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+.buttonSuccess {
+    background-color: #28a745;
+    
+}
+.containerPane{
+    width: 100%;
+    height: 100%;
+}
+
+.loginPane {
+    width: 100%;
+    height: 100%;
+    margin-top: 50px;
+}
+
+.loginContent {
+    color: #0363a3;;
+    vertical-align: middle;
+    margin: auto;
+    width: 30%;
+    height: 65%;
+    background-color: #CAE1F9;
+    border:none;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.30);
+}
+
+.loginDiv {
+    width: 70%;
+    height: 100%;
+    align-items: center;
+    margin-left: 20%;
+
+}
+
+.loginHeader {
+    text-align: center;
+}
+
+.formPane {
+    width: 100%;
+    height: 100%;
+    margin-top: 30px;
+}
+
+.formContent {
+    color: #0363a3;;
+    vertical-align: middle;
+    margin: auto;
+    width: 50%;
+    height: 70%;
+    background-color: #CAE1F9;
+    border:none;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.30);
+}
+
+.formDiv {
+    width: 70%;
+    height: 100%;
+    align-items: center;
+    margin-left: 20%;
+
+}
+
+.formHeader {
+    text-align: center;
+}
+
+@media (min-width: 481px) and (max-width: 768px) {
+    :host {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        top: 0;
+        height: 100%;
+        width: 100%;
+        overflow-y: scroll;
+    }
+    
+    html, body {
+        height: 100% !important;
+        width: 768px !important;
+        overflow-y: scroll;
+    }
+
+    .loginContent {
+        width: 85%;
+        height: 50%;
+    }
+
+    .loginDiv {
+        width: 80%;
+        height: 80%;
+        margin-left: 15%;
+    }
+}
+
+@media (min-width: 361px) and (max-width: 480px) {
+    :host {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        top: 0;
+        height: 100%;
+        width: 100%;
+        overflow-y: scroll;
+    }
+
+    html, body {
+        height: 100% !important;
+        width: 480px !important;
+        overflow-y: scroll;
+    }
+
+    .loginContent {
+        width: 80%;
+        height: 75%;
+    }
+}
+
+@media (min-width: 321px) and (max-width: 360px) {
+    :host {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        top: 0;
+        height: 100%;
+        width: 100%;
+        overflow-y: scroll;
+    }
+
+    html, body {
+        height: 100%;
+        width: 360px;
+        overflow-y: scroll;
+    }
+
+    .loginContent {
+        width: 85%;
+        height: 75%;
+    }
+}
+

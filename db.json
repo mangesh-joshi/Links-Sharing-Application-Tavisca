@@ -1,0 +1,55 @@
+{
+  "users": [
+    {
+      "email": "mang@gmail.com",
+      "password": "$2a$10$nrHxDjgtLZ.CrNeBkXJvje0.CUFprc.4NswBpqfneAqvGJwAKG1Hm",
+      "firstname": "mangesh",
+      "lastname": "joshi",
+      "id": 1
+    },
+    {
+      "email": "hello@gmail.com",
+      "password": "$2a$10$DDRfVXZNgC5340lTEqo2AuOPxjt2XGc.GUtk3qOmBtUMsqT9vteTu",
+      "firstname": "hello",
+      "lastname": "howru",
+      "id": 2
+    },
+    {
+      "email": "john@gmail.com",
+      "password": "$2a$10$1ANpXX07.IddXvc2p6U0eus3oAMcfHUS2KWv0NvZ.VaUv9tNZ2wDu",
+      "firstname": "John",
+      "lastname": "Matthews",
+      "id": 3
+    }
+  ],
+  "linksList": [
+    {
+      "id": 1,
+      "title": "Google",
+      "postby": "XYZ",
+      "website": "www.google.com",
+      "date": "4 January 2020"
+    },
+    {
+      "id": 2,
+      "title": "MDN",
+      "postby": "ABC",
+      "website": "https://developer.mozilla.org/en-US",
+      "date": "12 January 1994"
+    },
+    {
+      "title": "StackoverFlow",
+      "postby": "MNO",
+      "website": "https://stackoverflow.com/",
+      "date": "12 November 2020",
+      "id": 3
+    },
+    {
+      "title": "YouTube",
+      "postby": "John",
+      "website": "https://www.youtube.com/",
+      "date": "20 October 2020",
+      "id": 4
+    }
+  ]
+}

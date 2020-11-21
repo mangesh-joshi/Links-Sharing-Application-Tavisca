@@ -1,0 +1,34 @@
+<div class="formPane">
+  <div class="formContent">
+    <div class="formDiv">
+      <h2 *ngIf="showAdd" class="formHeader">Add Link Details</h2>
+      <h2 *ngIf="!showAdd" class="formHeader">Edit Link Details</h2>
+      <form #linkForm="ngForm">
+        <div class="form-group">
+          <p for="title">Title</p>
+          <input type="text" id="title" name="title" required [(ngModel)]="link.title" />
+        </div>
+        <div class="form-group">
+          <p for="postby">Posted By</p>
+          <input type="text" id="postby" name="postby" required [(ngModel)]="link.postby" />
+        </div>
+        <div class="form-group">
+          <p for="website">Website</p>
+          <input type="text" id="website" name="website" required [(ngModel)]="link.website" />
+        </div>
+        <div class="form-group">
+          <p for="date">Date</p>
+          <input type="text" id="date" name="date" required [(ngModel)]="link.date" />
+        </div>
+        <br>
+        <button [disabled]="linkForm.invalid" *ngIf="showAdd" class="btn buttonPrimary" type="button"
+          (click)="onSubmit(linkForm, 'add')">Add
+        </button>&nbsp;
+        <button [disabled]="linkForm.invalid" *ngIf="!showAdd" class="btn buttonPrimary" type="button"
+          (click)="onSubmit(linkForm, 'edit')">Update
+        </button>&nbsp;
+        <button class="btn buttonDanger" routerLink="/home">Cancel</button>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,25 +1,30 @@
-// This file is required by karma.conf.js and loads recursively all the .spec and framework files
+import 'jest-preset-angular';
 
-import 'zone.js/dist/zone-testing';
-import { getTestBed } from '@angular/core/testing';
-import {
-  BrowserDynamicTestingModule,
-  platformBrowserDynamicTesting
-} from '@angular/platform-browser-dynamic/testing';
-
-declare const require: {
-  context(path: string, deep?: boolean, filter?: RegExp): {
-    keys(): string[];
-    <T>(id: string): T;
+/* global mocks for jsdom */
+const mock = () => {
+  let storage: { [key: string]: string } = {};
+  return {
+    getItem: (key: string) => (key in storage ? storage[key] : null),
+    setItem: (key: string, value: string) => (storage[key] = value || ''),
+    removeItem: (key: string) => delete storage[key],
+    clear: () => (storage = {})
   };
 };
 
-// First, initialize the Angular testing environment.
-getTestBed().initTestEnvironment(
-  BrowserDynamicTestingModule,
-  platformBrowserDynamicTesting()
-);
-// Then we find all the tests.
-const context = require.context('./', true, /\.spec\.ts$/);
-// And load the modules.
-context.keys().map(context);
+Object.defineProperty(window, 'localStorage', { value: mock() });
+Object.defineProperty(window, 'sessionStorage', { value: mock() });
+Object.defineProperty(window, 'getComputedStyle', {
+  value: () => ['-webkit-appearance'],
+});
+
+Object.defineProperty(document.body.style, 'transform', {
+  value: () => {
+    return {
+      enumerable: true,
+      configurable: true,
+    };
+  },
+});
+
+/* output shorter and more meaningful Zone error stack traces */
+// Error.stackTraceLimit = 2;

@@ -1,0 +1,3563 @@
+{
+    "pipes": [],
+    "interfaces": [
+        {
+            "name": "AuthState",
+            "id": "interface-AuthState-7d0103665107de519c8e6085076ae7c4",
+            "file": "src/app/Login_user/store/login-reducer.ts",
+            "type": "interface",
+            "sourceCode": "import { createReducer, on } from '@ngrx/store';\r\nimport * as LoginActions from './login-actions';\r\n\r\nexport interface AuthState {\r\n  isAuthenticated: boolean;\r\n  loginToken: null;\r\n  message: string | null;\r\n}\r\n\r\n// set initial state\r\nexport const initialState: AuthState = {\r\n  isAuthenticated : false,\r\n  loginToken : null,\r\n  message : null,\r\n};\r\n\r\nexport const userReducer = createReducer(\r\n    initialState,\r\n    // Login Reducer\r\n    on(LoginActions.login, (state, action) => {\r\n            return {\r\n            ...state,\r\n            isAuthenticated : false,\r\n            loginToken : null,\r\n            message: null\r\n        };\r\n    }),\r\n\r\n    // LoginSuccess Reducer\r\n    on(LoginActions.loginSuccess, (state, action) => {\r\n        return {\r\n            ...state,\r\n            isAuthenticated : true,\r\n            loginToken : action.accessToken.accessToken,\r\n            message : null\r\n        };\r\n    }),\r\n\r\n    // LoginFailure reducer\r\n    on(LoginActions.loginFailure, (state, action) => {\r\n        return {\r\n            ...state,\r\n            isAuthenticated : false,\r\n            loginToken : null,\r\n            message : action.error,\r\n        };\r\n    }),\r\n\r\n);\r\n\r\n",
+            "properties": [
+                {
+                    "name": "isAuthenticated",
+                    "type": "boolean",
+                    "optional": false,
+                    "description": "",
+                    "line": 5
+                },
+                {
+                    "name": "loginToken",
+                    "type": "null",
+                    "optional": false,
+                    "description": "",
+                    "line": 6
+                },
+                {
+                    "name": "message",
+                    "type": "string | null",
+                    "optional": false,
+                    "description": "",
+                    "line": 7
+                }
+            ],
+            "indexSignatures": [],
+            "kind": 150,
+            "methods": []
+        },
+        {
+            "name": "LinkState",
+            "id": "interface-LinkState-d2fb68c1f929d323d7053d81b9998c1c",
+            "file": "src/app/links/store/links-reducer.ts",
+            "type": "interface",
+            "sourceCode": "import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';\r\nimport { createReducer, on } from '@ngrx/store';\r\nimport { Link } from '../../models/link';\r\nimport { linkActionTypes } from './links-actions';\r\n\r\nexport interface LinkState extends EntityState<Link> {\r\n  linksLoaded: boolean;\r\n  selectedLinkId: number;\r\n}\r\n\r\nexport const adapter: EntityAdapter<Link> = createEntityAdapter<Link>();\r\n\r\n// set link inital state\r\nexport const initialState = adapter.getInitialState({\r\n  linksLoaded: false,\r\n  selectedLinkId: null\r\n});\r\n\r\nexport const linkReducer = createReducer(\r\n  initialState,\r\n\r\n  // links loaded reducer\r\n  on(linkActionTypes.linksLoaded, (state, action) => {\r\n    return adapter.setAll(\r\n      action.links,\r\n      {...state, linksLoaded: true}\r\n    );\r\n  }),\r\n\r\n  // link loaded reducer\r\n  on(linkActionTypes.linkLoaded, (state, action) => {\r\n    return adapter.setAll(\r\n      action.link,\r\n      {...state, linkLoaded: true}\r\n    );\r\n  }),\r\n\r\n  // add link reducer\r\n  on(linkActionTypes.addLink, (state, action) => {\r\n    return adapter.addOne(action.link, state);\r\n  }),\r\n\r\n  // delete link reducer\r\n  on(linkActionTypes.deleteLink, (state, action) => {\r\n    return adapter.removeOne(action.linkId, state);\r\n  }),\r\n\r\n  // update link reducer\r\n  on(linkActionTypes.updateLink, (state, action) => {\r\n    return adapter.updateOne(action.update, state);\r\n  })\r\n);\r\n\r\nexport const { selectAll, selectEntities } = adapter.getSelectors();\r\n",
+            "properties": [
+                {
+                    "name": "linksLoaded",
+                    "type": "boolean",
+                    "optional": false,
+                    "description": "",
+                    "line": 7
+                },
+                {
+                    "name": "selectedLinkId",
+                    "type": "number",
+                    "optional": false,
+                    "description": "",
+                    "line": 8
+                }
+            ],
+            "indexSignatures": [],
+            "kind": 150,
+            "methods": [],
+            "extends": "EntityState"
+        },
+        {
+            "name": "RegisterState",
+            "id": "interface-RegisterState-8d48294cbb94929f29fbee92909ea760",
+            "file": "src/app/Register_user/store/register-reducer.ts",
+            "type": "interface",
+            "sourceCode": "import { createReducer, on } from '@ngrx/store';\r\nimport { RegisterUser } from '../../models/register';\r\nimport * as RegisterActions from './register-actions';\r\n\r\nexport interface RegisterState {\r\n  isRegistered: boolean;\r\n  user: RegisterUser | null;\r\n  token: string | null;\r\n  message: string | null;\r\n}\r\n\r\n// set initial register state\r\nexport const initialState: RegisterState = {\r\n  isRegistered: false,\r\n  user: null,\r\n  token : null,\r\n  message : null\r\n};\r\n\r\nexport const registerReducer = createReducer(\r\n    initialState,\r\n    // Register reducer\r\n    on(RegisterActions.register, (state, action) => {\r\n            return {\r\n            ...state,\r\n            isRegistered : false,\r\n            user : action.user,\r\n            token : null,\r\n            message : null\r\n        };\r\n    }),\r\n\r\n    // RegisterSuccess reducer\r\n    on(RegisterActions.registerSuccess, (state, action) => {\r\n        return {\r\n            ...state,\r\n            isRegistered : true,\r\n            user : null,\r\n            token : action.accessToken.accessToken,\r\n            message : null,\r\n        };\r\n    }),\r\n\r\n    // RegisterFailuer reducer\r\n    on(RegisterActions.registerFailure, (state, action) => {\r\n        return {\r\n            ...state,\r\n            isRegistered : false,\r\n            user : null,\r\n            token : null,\r\n            message : action.error,\r\n        };\r\n    })\r\n);\r\n",
+            "properties": [
+                {
+                    "name": "isRegistered",
+                    "type": "boolean",
+                    "optional": false,
+                    "description": "",
+                    "line": 6
+                },
+                {
+                    "name": "message",
+                    "type": "string | null",
+                    "optional": false,
+                    "description": "",
+                    "line": 9
+                },
+                {
+                    "name": "token",
+                    "type": "string | null",
+                    "optional": false,
+                    "description": "",
+                    "line": 8
+                },
+                {
+                    "name": "user",
+                    "type": "RegisterUser | null",
+                    "optional": false,
+                    "description": "",
+                    "line": 7
+                }
+            ],
+            "indexSignatures": [],
+            "kind": 150,
+            "methods": []
+        }
+    ],
+    "injectables": [
+        {
+            "name": "LinkEffects",
+            "id": "injectable-LinkEffects-d5d180969b8ab6be108f08eb3c82f24c",
+            "file": "src/app/links/store/links-effects.ts",
+            "properties": [
+                {
+                    "name": "addLink$",
+                    "defaultValue": "createEffect(() =>\r\n    this.actions$.pipe(\r\n      ofType(linkActionTypes.addLink),\r\n      concatMap((action) => this.linkService.addLink(action.link)),\r\n      tap(() => this.router.navigateByUrl('/home'))\r\n    ),\r\n    {dispatch: false}\r\n  )",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 28
+                },
+                {
+                    "name": "deleteLink$",
+                    "defaultValue": "createEffect(() =>\r\n    this.actions$.pipe(\r\n      ofType(linkActionTypes.deleteLink),\r\n      concatMap((action) => this.linkService.deleteLink(action.linkId))\r\n    ),\r\n    {dispatch: false}\r\n  )",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 37
+                },
+                {
+                    "name": "loadLink$",
+                    "defaultValue": "createEffect(() =>\r\n    this.actions$.pipe(\r\n      ofType(linkActionTypes.loadLink),\r\n      concatMap((action) => this.linkService.getLink(action.linkId)),\r\n      map(link => linkActionTypes.linkLoaded({link: [link]}))\r\n    )\r\n  )",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 20
+                },
+                {
+                    "name": "loadLinks$",
+                    "defaultValue": "createEffect(() =>\r\n    this.actions$.pipe(\r\n      ofType(linkActionTypes.loadLinks),\r\n      concatMap(() => this.linkService.getLinks()),\r\n      map(links => linkActionTypes.linksLoaded({links}))\r\n    )\r\n  )",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 12
+                },
+                {
+                    "name": "updateLink$",
+                    "defaultValue": "createEffect(() =>\r\n    this.actions$.pipe(\r\n      ofType(linkActionTypes.updateLink),\r\n      concatMap((action) => this.linkService.updateLink(action.update.id, action.update.changes)),\r\n      tap(() => this.router.navigateByUrl('/home'))\r\n    ),\r\n    {dispatch: false}\r\n  )",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 45
+                }
+            ],
+            "methods": [],
+            "description": "",
+            "sourceCode": "import { createEffect, Actions, ofType } from '@ngrx/effects';\r\nimport { concatMap, map, tap } from 'rxjs/operators';\r\nimport { Injectable } from '@angular/core';\r\nimport { Router } from '@angular/router';\r\nimport { linkActionTypes } from './links-actions';\r\nimport { LinksService } from '../../services/links.service';\r\n\r\n@Injectable()\r\nexport class LinkEffects {\r\n  constructor(private linkService: LinksService, private actions$: Actions, private router: Router) {}\r\n\r\n  loadLinks$ = createEffect(() =>\r\n    this.actions$.pipe(\r\n      ofType(linkActionTypes.loadLinks),\r\n      concatMap(() => this.linkService.getLinks()),\r\n      map(links => linkActionTypes.linksLoaded({links}))\r\n    )\r\n  );\r\n\r\n  loadLink$ = createEffect(() =>\r\n    this.actions$.pipe(\r\n      ofType(linkActionTypes.loadLink),\r\n      concatMap((action) => this.linkService.getLink(action.linkId)),\r\n      map(link => linkActionTypes.linkLoaded({link: [link]}))\r\n    )\r\n  );\r\n\r\n  addLink$ = createEffect(() =>\r\n    this.actions$.pipe(\r\n      ofType(linkActionTypes.addLink),\r\n      concatMap((action) => this.linkService.addLink(action.link)),\r\n      tap(() => this.router.navigateByUrl('/home'))\r\n    ),\r\n    {dispatch: false}\r\n  );\r\n\r\n  deleteLink$ = createEffect(() =>\r\n    this.actions$.pipe(\r\n      ofType(linkActionTypes.deleteLink),\r\n      concatMap((action) => this.linkService.deleteLink(action.linkId))\r\n    ),\r\n    {dispatch: false}\r\n  );\r\n\r\n  updateLink$ = createEffect(() =>\r\n    this.actions$.pipe(\r\n      ofType(linkActionTypes.updateLink),\r\n      concatMap((action) => this.linkService.updateLink(action.update.id, action.update.changes)),\r\n      tap(() => this.router.navigateByUrl('/home'))\r\n    ),\r\n    {dispatch: false}\r\n  );\r\n\r\n  \r\n}\r\n",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "args": [
+                    {
+                        "name": "linkService",
+                        "type": "LinksService"
+                    },
+                    {
+                        "name": "actions$",
+                        "type": "Actions"
+                    },
+                    {
+                        "name": "router",
+                        "type": "Router"
+                    }
+                ],
+                "line": 9,
+                "jsdoctags": [
+                    {
+                        "name": "linkService",
+                        "type": "LinksService",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    },
+                    {
+                        "name": "actions$",
+                        "type": "Actions",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    },
+                    {
+                        "name": "router",
+                        "type": "Router",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            "type": "injectable"
+        },
+        {
+            "name": "LinksService",
+            "id": "injectable-LinksService-6f6c9bd8926677fd16a08f55f20132b7",
+            "file": "src/app/services/links.service.ts",
+            "properties": [],
+            "methods": [
+                {
+                    "name": "addLink",
+                    "args": [
+                        {
+                            "name": "payload",
+                            "type": "Link"
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "Observable<Link>",
+                    "typeParameters": [],
+                    "line": 25,
+                    "jsdoctags": [
+                        {
+                            "name": "payload",
+                            "type": "Link",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "deleteLink",
+                    "args": [
+                        {
+                            "name": "payload",
+                            "type": "number"
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "any",
+                    "typeParameters": [],
+                    "line": 35,
+                    "jsdoctags": [
+                        {
+                            "name": "payload",
+                            "type": "number",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "getLink",
+                    "args": [
+                        {
+                            "name": "linkId",
+                            "type": "string | number"
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "Observable<Link>",
+                    "typeParameters": [],
+                    "line": 20,
+                    "jsdoctags": [
+                        {
+                            "name": "linkId",
+                            "type": "string | number",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "getLinks",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "Observable<Link[]>",
+                    "typeParameters": [],
+                    "line": 15
+                },
+                {
+                    "name": "updateLink",
+                    "args": [
+                        {
+                            "name": "linkId",
+                            "type": "string | number"
+                        },
+                        {
+                            "name": "changes",
+                            "type": "Partial<Link>"
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "Observable<Link>",
+                    "typeParameters": [],
+                    "line": 30,
+                    "jsdoctags": [
+                        {
+                            "name": "linkId",
+                            "type": "string | number",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        },
+                        {
+                            "name": "changes",
+                            "type": "Partial<Link>",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "description": "",
+            "sourceCode": "import { Injectable } from '@angular/core';\nimport { HttpClient } from '@angular/common/http';\nimport { Observable } from 'rxjs';\nimport { Link } from '../models/link';\nimport { environment } from '../../environments/environment';\n\n@Injectable({\n  providedIn: 'root'\n})\nexport class LinksService {\n\n  constructor(private http: HttpClient) { }\n\n  // Get all links list call to json-server\n  getLinks(): Observable<Link[]> {\n    return this.http.get<Link[]>(environment.linksUrl);\n  }\n\n  // Get single link details\n  getLink(linkId: string | number): Observable<Link> {\n    return this.http.get<Link>(`${environment.linksUrl}/${linkId}`);\n  }\n\n  // Add link call to json-server\n  addLink(payload: Link): Observable<Link> {\n    return this.http.post<Link>(environment.linksUrl, payload);\n  }\n\n  // Update link call to json-srver\n  updateLink(linkId: string | number, changes: Partial<Link>): Observable<Link> {\n    return this.http.put<Link>(`${environment.linksUrl}/${linkId}`, changes);\n  }\n\n  // Delete link call to json-server\n  deleteLink(payload: number): any {\n    return this.http.delete(`${environment.linksUrl}/${payload}`);\n  }\n}\n\n\n",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "args": [
+                    {
+                        "name": "http",
+                        "type": "HttpClient"
+                    }
+                ],
+                "line": 10,
+                "jsdoctags": [
+                    {
+                        "name": "http",
+                        "type": "HttpClient",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            "type": "injectable"
+        },
+        {
+            "name": "LoginService",
+            "id": "injectable-LoginService-055dd7a99561c96910eee8bbe10b5e78",
+            "file": "src/app/services/login.service.ts",
+            "properties": [],
+            "methods": [
+                {
+                    "name": "loginUser",
+                    "args": [
+                        {
+                            "name": "user",
+                            "type": "User"
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "any",
+                    "typeParameters": [],
+                    "line": 17,
+                    "jsdoctags": [
+                        {
+                            "name": "user",
+                            "type": "User",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "description": "",
+            "sourceCode": "import { Injectable } from '@angular/core';\nimport { HttpClient } from '@angular/common/http';\nimport { map } from 'rxjs/operators';\nimport { User } from '../models/login';\n//import { environment } from 'src/environments/environment';\nimport { environment } from '../../environments/environment'\n\n@Injectable({\n  providedIn: 'root'\n})\n\nexport class LoginService {\n\n  constructor(private http: HttpClient) { }\n\n  // Login user call to json-server-auth\n  loginUser(user: User): any {\n    return this.http.post(environment.loginUrl, user)\n    .pipe(map(data => {\n        return data;\n    }));\n  }\n}\n\n",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "args": [
+                    {
+                        "name": "http",
+                        "type": "HttpClient"
+                    }
+                ],
+                "line": 12,
+                "jsdoctags": [
+                    {
+                        "name": "http",
+                        "type": "HttpClient",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            "type": "injectable"
+        },
+        {
+            "name": "RegisterEffects",
+            "id": "injectable-RegisterEffects-098917c1d552d8fb769a7557c22ac4d8",
+            "file": "src/app/Register_user/store/register-effects.ts",
+            "properties": [
+                {
+                    "name": "login$",
+                    "defaultValue": "this.actions$.pipe(\r\n      ofType(LoginActions.register),\r\n      mergeMap(action =>\r\n        this.registerService.registerUser(action.user).pipe(\r\n          map(res => LoginActions.registerSuccess({accessToken : res})),\r\n          catchError(error => of(LoginActions.registerFailure({error})))\r\n        )\r\n      )\r\n    )",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 11,
+                    "decorators": [
+                        {
+                            "name": "Effect",
+                            "stringifiedArguments": ""
+                        }
+                    ]
+                }
+            ],
+            "methods": [],
+            "description": "",
+            "sourceCode": "import { Injectable } from '@angular/core';\r\nimport { Actions, ofType, Effect } from '@ngrx/effects';\r\nimport { of } from 'rxjs';\r\nimport { map, mergeMap, catchError } from 'rxjs/operators';\r\nimport { RegisterService } from '../../services/register.service';\r\nimport * as LoginActions from './register-actions';\r\n\r\n@Injectable()\r\nexport class RegisterEffects {\r\n    @Effect()\r\n    login$ = this.actions$.pipe(\r\n      ofType(LoginActions.register),\r\n      mergeMap(action =>\r\n        this.registerService.registerUser(action.user).pipe(\r\n          map(res => LoginActions.registerSuccess({accessToken : res})),\r\n          catchError(error => of(LoginActions.registerFailure({error})))\r\n        )\r\n      )\r\n    );\r\n\r\n  constructor(private actions$: Actions, private registerService: RegisterService) {}\r\n}\r\n",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "args": [
+                    {
+                        "name": "actions$",
+                        "type": "Actions"
+                    },
+                    {
+                        "name": "registerService",
+                        "type": "RegisterService"
+                    }
+                ],
+                "line": 19,
+                "jsdoctags": [
+                    {
+                        "name": "actions$",
+                        "type": "Actions",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    },
+                    {
+                        "name": "registerService",
+                        "type": "RegisterService",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            "type": "injectable"
+        },
+        {
+            "name": "RegisterService",
+            "id": "injectable-RegisterService-c40c076159fc864b723661280968cd15",
+            "file": "src/app/services/register.service.ts",
+            "properties": [],
+            "methods": [
+                {
+                    "name": "registerUser",
+                    "args": [
+                        {
+                            "name": "user",
+                            "type": "RegisterUser"
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "any",
+                    "typeParameters": [],
+                    "line": 17,
+                    "jsdoctags": [
+                        {
+                            "name": "user",
+                            "type": "RegisterUser",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "description": "",
+            "sourceCode": "import { Injectable } from '@angular/core';\nimport { HttpClient } from '@angular/common/http';\nimport { map } from 'rxjs/operators';\nimport { RegisterUser } from '../models/register';\n//import { environment } from 'src/environments/environment';\nimport { environment } from '../../environments/environment'\n\n@Injectable({\n  providedIn: 'root'\n})\n\nexport class RegisterService {\n\n  constructor(private http: HttpClient) { }\n\n  // Register User call to json-server-auth\n  registerUser(user: RegisterUser): any {\n    return this.http.post(environment.registerUrl, user)\n    .pipe(map(data => {\n        return data;\n    }));\n  }\n}\n",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "args": [
+                    {
+                        "name": "http",
+                        "type": "HttpClient"
+                    }
+                ],
+                "line": 12,
+                "jsdoctags": [
+                    {
+                        "name": "http",
+                        "type": "HttpClient",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            "type": "injectable"
+        },
+        {
+            "name": "ThemeService",
+            "id": "injectable-ThemeService-f21ffca61936d85a7e2053e8b2cfb2d6",
+            "file": "src/app/services/theme.service.ts",
+            "properties": [],
+            "methods": [
+                {
+                    "name": "setTheme",
+                    "args": [
+                        {
+                            "name": "theme",
+                            "type": "literal type"
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 30,
+                    "modifierKind": [
+                        112
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "theme",
+                            "type": "literal type",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "toggleDark",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 20
+                },
+                {
+                    "name": "toggleLight",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 25
+                }
+            ],
+            "description": "",
+            "sourceCode": "import { Injectable } from '@angular/core';\n\n// Dark theme properties\nexport const darkTheme = {\n  'primary-color': '#484848',\n  'background-color': '#B0B0B0',\n  'text-color': 'white'\n};\n\n// Light theme properties\nexport const lightTheme = {\n  'primary-color': '#3c5be7da',\n  'background-color': 'white',\n  'text-color': 'white'\n};\n\n@Injectable({ providedIn: 'root' })\nexport class ThemeService {\n  // Set dark theme\n  toggleDark(): void {\n    this.setTheme(darkTheme);\n  }\n\n  // set light theme\n  toggleLight(): void {\n    this.setTheme(lightTheme);\n  }\n\n  // set properties of root variables\n  private setTheme(theme: {}): void {\n    Object.keys(theme).forEach(k =>\n      document.documentElement.style.setProperty(`--${k}`, theme[k])\n    );\n  }\n}\n\n",
+            "type": "injectable"
+        },
+        {
+            "name": "UserEffects",
+            "id": "injectable-UserEffects-0a1919aaebe5dbc7f86570511054de9c",
+            "file": "src/app/Login_user/store/login-effects.ts",
+            "properties": [
+                {
+                    "name": "login$",
+                    "defaultValue": "this.actions$.pipe(\r\n      ofType(LoginActions.login),\r\n      mergeMap(action =>\r\n        this.authService.loginUser(action.user).pipe(\r\n          map(res => LoginActions.loginSuccess({accessToken : res})),\r\n          catchError(error => of(LoginActions.loginFailure({error})))\r\n        )\r\n      )\r\n    )",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 11,
+                    "decorators": [
+                        {
+                            "name": "Effect",
+                            "stringifiedArguments": ""
+                        }
+                    ]
+                }
+            ],
+            "methods": [],
+            "description": "",
+            "sourceCode": "import { Injectable } from '@angular/core';\r\nimport { Actions, ofType, Effect } from '@ngrx/effects';\r\nimport { of } from 'rxjs';\r\nimport { map, mergeMap, catchError } from 'rxjs/operators';\r\nimport { LoginService } from '../../services/login.service';\r\nimport * as LoginActions from './login-actions';\r\n\r\n@Injectable()\r\nexport class UserEffects {\r\n    @Effect()\r\n    login$ = this.actions$.pipe(\r\n      ofType(LoginActions.login),\r\n      mergeMap(action =>\r\n        this.authService.loginUser(action.user).pipe(\r\n          map(res => LoginActions.loginSuccess({accessToken : res})),\r\n          catchError(error => of(LoginActions.loginFailure({error})))\r\n        )\r\n      )\r\n    );\r\n\r\n  constructor(private actions$: Actions, private authService: LoginService) {}\r\n}\r\n",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "args": [
+                    {
+                        "name": "actions$",
+                        "type": "Actions"
+                    },
+                    {
+                        "name": "authService",
+                        "type": "LoginService"
+                    }
+                ],
+                "line": 19,
+                "jsdoctags": [
+                    {
+                        "name": "actions$",
+                        "type": "Actions",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    },
+                    {
+                        "name": "authService",
+                        "type": "LoginService",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            "type": "injectable"
+        }
+    ],
+    "classes": [
+        {
+            "name": "AppPage",
+            "id": "class-AppPage-ee2067dfb1c303f41003aea7d82d51e0",
+            "file": "e2e/src/app.po.ts",
+            "type": "class",
+            "sourceCode": "import { browser, by, element } from 'protractor';\n\nexport class AppPage {\n  async navigateTo(): Promise<unknown> {\n    return browser.get(browser.baseUrl);\n  }\n\n  async getTitleText(): Promise<string> {\n    return element(by.css('app-root .content span')).getText();\n  }\n}\n",
+            "properties": [],
+            "methods": [
+                {
+                    "name": "getTitleText",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "Promise<string>",
+                    "typeParameters": [],
+                    "line": 8,
+                    "modifierKind": [
+                        120
+                    ]
+                },
+                {
+                    "name": "navigateTo",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "Promise<unknown>",
+                    "typeParameters": [],
+                    "line": 4,
+                    "modifierKind": [
+                        120
+                    ]
+                }
+            ],
+            "indexSignatures": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "hostBindings": [],
+            "hostListeners": []
+        },
+        {
+            "name": "Link",
+            "id": "class-Link-0c4a89b17daa7a5ec4440eca47381a0b",
+            "file": "src/app/models/link.ts",
+            "type": "class",
+            "sourceCode": "export class Link {\r\n    id: number;\r\n    title: string;\r\n    postby: string;\r\n    website: string;\r\n    date: string;\r\n}\r\n",
+            "properties": [
+                {
+                    "name": "date",
+                    "type": "string",
+                    "optional": false,
+                    "description": "",
+                    "line": 6
+                },
+                {
+                    "name": "id",
+                    "type": "number",
+                    "optional": false,
+                    "description": "",
+                    "line": 2
+                },
+                {
+                    "name": "postby",
+                    "type": "string",
+                    "optional": false,
+                    "description": "",
+                    "line": 4
+                },
+                {
+                    "name": "title",
+                    "type": "string",
+                    "optional": false,
+                    "description": "",
+                    "line": 3
+                },
+                {
+                    "name": "website",
+                    "type": "string",
+                    "optional": false,
+                    "description": "",
+                    "line": 5
+                }
+            ],
+            "methods": [],
+            "indexSignatures": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "hostBindings": [],
+            "hostListeners": []
+        },
+        {
+            "name": "RegisterUser",
+            "id": "class-RegisterUser-8975ea9bb1f47b144d1b4f6cc08a54bc",
+            "file": "src/app/models/register.ts",
+            "type": "class",
+            "sourceCode": "export class RegisterUser {\r\n    firstname: string;\r\n    lastname: string;\r\n    email: string;\r\n    password: string;\r\n}\r\n",
+            "properties": [
+                {
+                    "name": "email",
+                    "type": "string",
+                    "optional": false,
+                    "description": "",
+                    "line": 4
+                },
+                {
+                    "name": "firstname",
+                    "type": "string",
+                    "optional": false,
+                    "description": "",
+                    "line": 2
+                },
+                {
+                    "name": "lastname",
+                    "type": "string",
+                    "optional": false,
+                    "description": "",
+                    "line": 3
+                },
+                {
+                    "name": "password",
+                    "type": "string",
+                    "optional": false,
+                    "description": "",
+                    "line": 5
+                }
+            ],
+            "methods": [],
+            "indexSignatures": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "hostBindings": [],
+            "hostListeners": []
+        },
+        {
+            "name": "User",
+            "id": "class-User-132621567381433f92e78f0001762032",
+            "file": "src/app/models/login.ts",
+            "type": "class",
+            "sourceCode": "export class User {\r\n    email: string;\r\n    password: string;\r\n  }\r\n  ",
+            "properties": [
+                {
+                    "name": "email",
+                    "type": "string",
+                    "optional": false,
+                    "description": "",
+                    "line": 2
+                },
+                {
+                    "name": "password",
+                    "type": "string",
+                    "optional": false,
+                    "description": "",
+                    "line": 3
+                }
+            ],
+            "methods": [],
+            "indexSignatures": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "hostBindings": [],
+            "hostListeners": []
+        }
+    ],
+    "directives": [],
+    "components": [
+        {
+            "name": "AddNewLinkComponent",
+            "id": "component-AddNewLinkComponent-0797cbe48dd63553bc2c258c8249eeda",
+            "file": "src/app/links/add-new-link/add-new-link.component.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "app-add-new-link",
+            "styleUrls": [
+                "./add-new-link.component.scss"
+            ],
+            "styles": [],
+            "templateUrl": [
+                "./add-new-link.component.html"
+            ],
+            "viewProviders": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "propertiesClass": [
+                {
+                    "name": "id",
+                    "type": "string",
+                    "optional": false,
+                    "description": "",
+                    "line": 20
+                },
+                {
+                    "name": "link",
+                    "defaultValue": "new Link()",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 18,
+                    "modifierKind": [
+                        114
+                    ]
+                },
+                {
+                    "name": "showAdd",
+                    "defaultValue": "true",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 19
+                },
+                {
+                    "name": "submitted",
+                    "defaultValue": "false",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 17
+                },
+                {
+                    "name": "tempLink",
+                    "type": "Link[]",
+                    "optional": false,
+                    "description": "",
+                    "line": 21
+                }
+            ],
+            "methodsClass": [
+                {
+                    "name": "ngOnInit",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 40
+                },
+                {
+                    "name": "onSubmit",
+                    "args": [
+                        {
+                            "name": "form",
+                            "type": "NgForm"
+                        },
+                        {
+                            "name": "type",
+                            "type": "string"
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 42,
+                    "jsdoctags": [
+                        {
+                            "name": "form",
+                            "type": "NgForm",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        },
+                        {
+                            "name": "type",
+                            "type": "string",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "hostBindings": [],
+            "hostListeners": [],
+            "description": "",
+            "rawdescription": "",
+            "type": "component",
+            "sourceCode": "import { Store } from '@ngrx/store';\nimport { Component, OnInit } from '@angular/core';\nimport { ActivatedRoute, Router } from '@angular/router';\nimport { Update } from '@ngrx/entity';\nimport { Link } from '../../models/link';\nimport { addLink, linkActionTypes, linkLoaded, loadLink } from '../store/links-actions';\nimport { NgForm } from '@angular/forms';\nimport { getLinkDetails } from '../store/links.selector';\n\n@Component({\n  selector: 'app-add-new-link',\n  templateUrl: './add-new-link.component.html',\n  styleUrls: ['./add-new-link.component.scss']\n})\nexport class AddNewLinkComponent implements OnInit {\n\n  submitted = false;\n  public link = new Link();\n  showAdd = true;\n  id: string;\n  tempLink: Link[];\n\n  constructor(private store: Store, private router: Router, private route: ActivatedRoute) {\n    this.route.paramMap.subscribe((params) => {\n      this.id = params.get('id'); // Get edit link id\n    });\n\n    if (this.id) {\n      this.showAdd = false; // Hide Add Link button\n\n      this.store.dispatch(loadLink({linkId: this.id}));\n      this.store.select(getLinkDetails).subscribe( response => {\n        this.tempLink = response;\n        this.link = {...this.tempLink[0]}; // Link details to be updated\n      });\n    }\n\n  }\n\n  ngOnInit(): void {}\n\n  onSubmit(form: NgForm, type: string): void {\n    this.submitted = true;\n\n    if (form.valid) {\n      if (type === 'add') {\n        this.store.dispatch(addLink({link : this.link})); // dispatch add link action if type is add\n      } else {\n        if (type === 'edit') {\n          // update link payload\n          const update: Update<Link> = {\n            id: this.link.id,\n            changes: {\n              ...this.link,\n              ...form.value\n            }\n          };\n\n          this.store.dispatch(linkActionTypes.updateLink({update})); // dispatch update link action if type is edit\n        }\n      }\n    }\n  }\n}\n",
+            "assetsDirs": [],
+            "styleUrlsData": [
+                {
+                    "data": "button.btn {\r\n  font-size: 0.9rem;\r\n  line-height: 1.2;\r\n}\r\n\r\n.formContent {\r\n  height: 80%;\r\n  width: 40%;\r\n}\r\n\r\nbutton:disabled {\r\n  background-color: gray;\r\n  color: darkslategray;\r\n  border: none;\r\n  cursor: not-allowed;\r\n}\r\n\r\n@media (min-width: 481px) and (max-width: 768px) {\r\n  .formPane {\r\n      margin-top: 80px;\r\n  }\r\n\r\n  .formContent {\r\n      height: 55%;\r\n      width: 85%;\r\n  }\r\n}\r\n\r\n@media (min-width: 361px) and (max-width: 480px) {\r\n  .formContent {\r\n      height: 70%;\r\n      width: 85%;\r\n  }\r\n}\r\n\r\n@media (min-width: 321px) and (max-width: 360px) {\r\n  .formContent {\r\n      height: 70%;\r\n      width: 85%;\r\n  }\r\n}",
+                    "styleUrl": "./add-new-link.component.scss"
+                }
+            ],
+            "stylesData": "",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "args": [
+                    {
+                        "name": "store",
+                        "type": "Store"
+                    },
+                    {
+                        "name": "router",
+                        "type": "Router"
+                    },
+                    {
+                        "name": "route",
+                        "type": "ActivatedRoute"
+                    }
+                ],
+                "line": 21,
+                "jsdoctags": [
+                    {
+                        "name": "store",
+                        "type": "Store",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    },
+                    {
+                        "name": "router",
+                        "type": "Router",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    },
+                    {
+                        "name": "route",
+                        "type": "ActivatedRoute",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            "implements": [
+                "OnInit"
+            ],
+            "templateData": "<div class=\"formPane\">\n  <div class=\"formContent\">\n    <div class=\"formDiv\">\n      <h2 *ngIf=\"showAdd\" class=\"formHeader\">Add Link Details</h2>\n      <h2 *ngIf=\"!showAdd\" class=\"formHeader\">Edit Link Details</h2>\n      <form #linkForm=\"ngForm\">\n        <div class=\"form-group\">\n          <p for=\"title\">Title</p>\n          <input type=\"text\" id=\"title\" name=\"title\" required [(ngModel)]=\"link.title\" />\n        </div>\n        <div class=\"form-group\">\n          <p for=\"postby\">Posted By</p>\n          <input type=\"text\" id=\"postby\" name=\"postby\" required [(ngModel)]=\"link.postby\" />\n        </div>\n        <div class=\"form-group\">\n          <p for=\"website\">Website</p>\n          <input type=\"text\" id=\"website\" name=\"website\" required [(ngModel)]=\"link.website\" />\n        </div>\n        <div class=\"form-group\">\n          <p for=\"date\">Date</p>\n          <input type=\"text\" id=\"date\" name=\"date\" required [(ngModel)]=\"link.date\" />\n        </div>\n        <br>\n        <button [disabled]=\"linkForm.invalid\" *ngIf=\"showAdd\" class=\"btn buttonPrimary\" type=\"button\"\n          (click)=\"onSubmit(linkForm, 'add')\">Add\n        </button>&nbsp;\n        <button [disabled]=\"linkForm.invalid\" *ngIf=\"!showAdd\" class=\"btn buttonPrimary\" type=\"button\"\n          (click)=\"onSubmit(linkForm, 'edit')\">Update\n        </button>&nbsp;\n        <button class=\"btn buttonDanger\" routerLink=\"/home\">Cancel</button>\n      </form>\n    </div>\n  </div>\n</div>"
+        },
+        {
+            "name": "AppComponent",
+            "id": "component-AppComponent-f884c71ddd43b5c42ef023a66f91b2d9",
+            "file": "src/app/app.component.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "app-root",
+            "styleUrls": [
+                "./app.component.scss"
+            ],
+            "styles": [],
+            "templateUrl": [
+                "./app.component.html"
+            ],
+            "viewProviders": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "propertiesClass": [
+                {
+                    "name": "title",
+                    "defaultValue": "'link-share-application'",
+                    "type": "string",
+                    "optional": false,
+                    "description": "",
+                    "line": 9
+                }
+            ],
+            "methodsClass": [],
+            "hostBindings": [],
+            "hostListeners": [],
+            "description": "",
+            "rawdescription": "",
+            "type": "component",
+            "sourceCode": "import { Component } from '@angular/core';\n\n@Component({\n  selector: 'app-root',\n  templateUrl: './app.component.html',\n  styleUrls: ['./app.component.scss']\n})\nexport class AppComponent {\n  title = 'link-share-application';\n}\n",
+            "assetsDirs": [],
+            "styleUrlsData": [
+                {
+                    "data": "",
+                    "styleUrl": "./app.component.scss"
+                }
+            ],
+            "stylesData": "",
+            "templateData": "<app-header></app-header>\n<router-outlet></router-outlet>"
+        },
+        {
+            "name": "HeaderComponent",
+            "id": "component-HeaderComponent-0b84d724822e4311eaeaa22e36501023",
+            "file": "src/app/header/header.component.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "app-header",
+            "styleUrls": [
+                "./header.component.scss"
+            ],
+            "styles": [],
+            "templateUrl": [
+                "./header.component.html"
+            ],
+            "viewProviders": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "propertiesClass": [
+                {
+                    "name": "darkTheme",
+                    "defaultValue": "new FormControl(false)",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 15
+                },
+                {
+                    "name": "isLoggedIn",
+                    "type": "boolean",
+                    "optional": false,
+                    "description": "",
+                    "line": 14
+                }
+            ],
+            "methodsClass": [
+                {
+                    "name": "logout",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 40
+                },
+                {
+                    "name": "ngOnInit",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 19
+                },
+                {
+                    "name": "onSetTheme",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 29
+                }
+            ],
+            "hostBindings": [],
+            "hostListeners": [],
+            "description": "",
+            "rawdescription": "",
+            "type": "component",
+            "sourceCode": "import { Component, OnInit } from '@angular/core';\nimport { Store } from '@ngrx/store';\nimport { authSelector } from '../Login_user/store/login-selector';\nimport { ThemeService } from '../services/theme.service';\nimport { FormControl } from '@angular/forms';\n\n@Component({\n  selector: 'app-header',\n  templateUrl: './header.component.html',\n  styleUrls: ['./header.component.scss']\n})\nexport class HeaderComponent implements OnInit {\n\n  isLoggedIn: boolean;\n  darkTheme = new FormControl(false);\n\n  constructor(private store: Store, private themeService: ThemeService) {}\n\n  ngOnInit(): void {\n    // Set isLoggedIn depending if user is authenticated\n    this.store.select(authSelector).subscribe(state => {\n      if (state) {\n        this.isLoggedIn = state.isAuthenticated;\n      }\n    });\n  }\n\n  // Toggle theme dark/light\n  onSetTheme(): void {\n    this.darkTheme.valueChanges.subscribe(value => {\n      if (value) {\n        this.themeService.toggleDark();\n      } else {\n        this.themeService.toggleLight();\n      }\n    });\n\n  }\n\n  logout(): void {\n    localStorage.removeItem('accessToken');\n    window.location.reload();\n  }\n\n}\n",
+            "assetsDirs": [],
+            "styleUrlsData": [
+                {
+                    "data": ".headerPane {\r\n    width: 98%;\r\n    height: 80px;\r\n    background-color: var(--primary-color);\r\n    color: var(--text-color);\r\n    font-size: large;\r\n    font-family: 'Segoe UI';\r\n    margin: 0.5%;\r\n    display: flex;\r\n    flex-direction: row;\r\n    justify-content: space-around;\r\n}\r\n\r\n.appName {\r\n    font-size: xx-large;\r\n    margin-left: 10px;\r\n    font-weight: bold;\r\n}\r\n\r\n.headerName {\r\n    width: 50%; \r\n    float: left;\r\n}\r\n\r\n.headerButton {\r\n    margin-top: 10px;\r\n    float: right;\r\n    width: 50%;\r\n}\r\n\r\n.appButton {\r\n    background-color: white;\r\n    color: #E74C3C;\r\n    font-size: large;\r\n    border: none;\r\n    cursor: pointer;\r\n    border-radius: 3em;\r\n    width: 80px;\r\n    text-align: center;\r\n    height: 25px;\r\n    text-decoration: none;\r\n}\r\n\r\n.slider.round {\r\n    margin-top: 5px;\r\n    border-radius: 34px;\r\n  }\r\n  \r\n.slider.round:before {\r\n  border-radius: 50%;\r\n}\r\n\r\n.switch {\r\n  position: relative;\r\n  display: inline-block;\r\n  width: 42px;\r\n  height: 25px;\r\n}\r\n\r\n.switch input { \r\n  opacity: 0;\r\n  width: 0;\r\n  height: 0;\r\n}\r\n\r\n.slider {\r\n  position: absolute;\r\n  cursor: pointer;\r\n  top: 0;\r\n  left: 0;\r\n  right: 0;\r\n  bottom: 0;\r\n  background-color: rgb(247, 221, 221);\r\n  -webkit-transition: .4s;\r\n  transition: .4s;\r\n}\r\n\r\n.slider:before {\r\n  position: absolute;\r\n  content: \"\";\r\n  height: 18px;\r\n  width: 18px;\r\n  left: 4px;\r\n  bottom: 1px;\r\n  background-color: white;\r\n  -webkit-transition: .4s;\r\n  transition: .4s;\r\n}\r\n\r\ninput:checked + .slider {\r\n  background-color: #B0B0B0;\r\n}\r\n\r\ninput:focus + .slider {\r\n  box-shadow: 0 0 1px #B0B0B0;\r\n}\r\n\r\ninput:checked + .slider:before {\r\n  -webkit-transform: translateX(16px);\r\n  -ms-transform: translateX(16px);\r\n  transform: translateX(16px);\r\n}\r\n\r\n.logInButton {\r\n  margin-left: 66%;\r\n}\r\n\r\n.logOutButton {\r\n  margin-left: 78%;\r\n}\r\n\r\n.regThemeButton {\r\n  margin-left: 1%;\r\n}\r\n\r\n\r\n@media (min-width: 1025px) and (max-width: 1366px) {\r\n  .headerPane {\r\n    width: 97%;\r\n    height: 50px;\r\n    font-size: large;\r\n  }\r\n\r\n  .appName {\r\n      font-size: 28px;\r\n      margin-left: 10px;\r\n      font-weight: bold;\r\n  }\r\n\r\n  .headerName {\r\n      width: 50%; \r\n      float: left;\r\n  }\r\n\r\n  .headerButton {\r\n      margin-top: 10px;\r\n      float: right;\r\n      width: 50%;\r\n  }\r\n\r\n  .appButton {\r\n      font-size: large;\r\n      width: 75px;\r\n      height: 25px;\r\n  }\r\n\r\n  .logInButton {\r\n    margin-left: 60%;\r\n  }\r\n  \r\n  .logOutButton {\r\n    margin-left: 70%;\r\n  }\r\n  \r\n  .regThemeButton {\r\n    margin-left: 1%;\r\n  }\r\n\r\n}\r\n\r\n@media (min-width: 481px) and (max-width: 768px) {\r\n  .headerPane {\r\n    width: 98%;\r\n    height: 50px;\r\n    font-size: large;\r\n  }\r\n\r\n  .appName {\r\n      font-size: 28px;\r\n      margin-left: 10px;\r\n      font-weight: bold;\r\n  }\r\n\r\n  .headerName {\r\n      width: 50%; \r\n      float: left;\r\n  }\r\n\r\n  .headerButton {\r\n      margin-top: 10px;\r\n      float: right;\r\n      width: 50%;\r\n  }\r\n\r\n  .appButton {\r\n      font-size: large;\r\n      width: 75px;\r\n      height: 25px;\r\n  }\r\n\r\n  .logInButton {\r\n    margin-left: 40%;\r\n  }\r\n  \r\n  .logOutButton {\r\n    margin-left: 60%;\r\n  }\r\n  \r\n  .regThemeButton {\r\n    margin-left: 1%;\r\n  }\r\n\r\n}\r\n\r\n@media (min-width: 481px) and (max-width: 768px) {\r\n  .headerPane {\r\n    width: 98%;\r\n    height: 50px;\r\n    font-size: large;\r\n  }\r\n\r\n  .appName {\r\n      font-size: 28px;\r\n      margin-left: 10px;\r\n      font-weight: bold;\r\n  }\r\n\r\n  .headerName {\r\n      width: 50%; \r\n      float: left;\r\n  }\r\n\r\n  .headerButton {\r\n      margin-top: 10px;\r\n      float: right;\r\n      width: 50%;\r\n  }\r\n\r\n  .appButton {\r\n      font-size: large;\r\n      width: 75px;\r\n      height: 25px;\r\n  }\r\n\r\n  .logInButton {\r\n    margin-left: 40%;\r\n  }\r\n  \r\n  .logOutButton {\r\n    margin-left: 60%;\r\n  }\r\n  \r\n  .regThemeButton {\r\n    margin-left: 1%;\r\n  }\r\n\r\n}\r\n\r\n@media (min-width: 361px) and (max-width: 480px) {\r\n  .headerPane {\r\n    width: 98%;\r\n    height: 80px;\r\n    font-size: small;\r\n    display: flex;\r\n    flex-direction: row;\r\n    justify-content: space-around;\r\n  }\r\n\r\n  .appName {\r\n      font-size: 28px;\r\n      margin-left: 10px;\r\n      font-weight: bold;\r\n  }\r\n\r\n  .headerName {\r\n      width: 50%; \r\n      float: left;\r\n  }\r\n\r\n  .headerButton {\r\n      margin-top: 10px;\r\n      float: right;\r\n      width: 50%;\r\n  }\r\n\r\n  .appButton {\r\n      font-size: large;\r\n      width: 60px;\r\n      height: 25px;\r\n  }\r\n\r\n  .logInButton {\r\n    margin-left: 50%;\r\n  }\r\n  \r\n  .logOutButton {\r\n    margin-left: 60%;\r\n  }\r\n  \r\n  .regThemeButton {\r\n    margin-left: 50%;\r\n  }\r\n\r\n  .slider.round {\r\n    margin-top: 0px;\r\n  }\r\n\r\n  .slider {\r\n    bottom: 3px;\r\n  }\r\n\r\n}\r\n\r\n@media (min-width: 321px) and (max-width: 360px) {\r\n  .headerPane {\r\n    width: 98%;\r\n    height: 50px;\r\n    font-size: small;\r\n  }\r\n\r\n  .appName {\r\n      font-size: 18px;\r\n      margin-left: 10px;\r\n      font-weight: bold;\r\n  }\r\n\r\n  .headerName {\r\n      width: 50%; \r\n      float: left;\r\n  }\r\n\r\n  .headerButton {\r\n      margin-top: 10px;\r\n      float: right;\r\n      width: 50%;\r\n  }\r\n\r\n  .appButton {\r\n      font-size: small;\r\n      width: 60px;\r\n      height: 25px;\r\n  }\r\n\r\n  .logInButton {\r\n    margin-left: 0%;\r\n  }\r\n  \r\n  .logOutButton {\r\n    margin-left: 1%;\r\n  }\r\n  \r\n  .regThemeButton {\r\n    margin-left: 1%;\r\n  }\r\n\r\n  .slider.round {\r\n    margin-top: 0px;\r\n  }\r\n\r\n  .slider {\r\n    bottom: 3px;\r\n  }\r\n\r\n}\r\n\r\n@media (min-width: 300px) and (max-width: 320px) {\r\n  .headerPane {\r\n    width: 98%;\r\n    height: 50px;\r\n    font-size: small;\r\n  }\r\n\r\n  .appName {\r\n      font-size: 18px;\r\n      margin-left: 10px;\r\n      font-weight: bold;\r\n  }\r\n\r\n  .headerName {\r\n      width: 50%; \r\n      float: left;\r\n  }\r\n\r\n  .headerButton {\r\n      margin-top: 10px;\r\n      float: right;\r\n      width: 50%;\r\n  }\r\n\r\n  .appButton {\r\n      font-size: small;\r\n      width: 60px;\r\n      height: 25px;\r\n  }\r\n\r\n  .logInButton {\r\n    margin-left: 0%;\r\n  }\r\n  \r\n  .logOutButton {\r\n    margin-left: 1%;\r\n  }\r\n  \r\n  .regThemeButton {\r\n    margin-left: 1%;\r\n  }\r\n\r\n  .slider.round {\r\n    margin-top: 0px;\r\n  }\r\n\r\n  .slider {\r\n    bottom: 3px;\r\n  }\r\n}\r\n  ",
+                    "styleUrl": "./header.component.scss"
+                }
+            ],
+            "stylesData": "",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "args": [
+                    {
+                        "name": "store",
+                        "type": "Store"
+                    },
+                    {
+                        "name": "themeService",
+                        "type": "ThemeService"
+                    }
+                ],
+                "line": 15,
+                "jsdoctags": [
+                    {
+                        "name": "store",
+                        "type": "Store",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    },
+                    {
+                        "name": "themeService",
+                        "type": "ThemeService",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            "implements": [
+                "OnInit"
+            ],
+            "templateData": "<div class=\"headerPane\" color=\"primary\" id=\"headerSection\">\n    <div class=\"headerName\"><span class=\"appName\">Link Share Application </span></div>\n    <div class=\"headerButton\">\n        <button id=\"loginLink\" class=\"appButton logInButton\" routerLink=\"/login\" *ngIf=\"!isLoggedIn\">Login</button>\n        <button class=\"appButton logOutButton\" (click)=\"logout()\" *ngIf=\"isLoggedIn\">Logout</button>\n        <button class=\"appButton regThemeButton\" routerLink=\"/register\" *ngIf=\"!isLoggedIn\">Register</button>\n        <label class=\"switch\" style=\"margin-left: 1%;\">\n            <input id=\"darkTheme\" type=\"checkbox\" (click)=\"onSetTheme()\" [formControl]=\"darkTheme\">\n            <span class=\"slider round\"></span>\n        </label>\n    </div>\n</div>\n"
+        },
+        {
+            "name": "LinksComponent",
+            "id": "component-LinksComponent-91861a9540995587cec5717f715a5707",
+            "file": "src/app/links/links.component.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "app-links",
+            "styleUrls": [
+                "./links.component.scss"
+            ],
+            "styles": [],
+            "templateUrl": [
+                "./links.component.html"
+            ],
+            "viewProviders": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "propertiesClass": [
+                {
+                    "name": "isLoggedIn",
+                    "type": "boolean",
+                    "optional": false,
+                    "description": "",
+                    "line": 17
+                },
+                {
+                    "name": "links$",
+                    "type": "any",
+                    "optional": false,
+                    "description": "",
+                    "line": 16
+                }
+            ],
+            "methodsClass": [
+                {
+                    "name": "deleteLink",
+                    "args": [
+                        {
+                            "name": "linkId",
+                            "type": "number"
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 32,
+                    "jsdoctags": [
+                        {
+                            "name": "linkId",
+                            "type": "number",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "ngOnInit",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 21
+                }
+            ],
+            "hostBindings": [],
+            "hostListeners": [],
+            "description": "",
+            "rawdescription": "",
+            "type": "component",
+            "sourceCode": "import { Component, OnInit } from '@angular/core';\nimport { Observable } from 'rxjs';\nimport { Link } from '../models/link';\nimport { Store } from '@ngrx/store';\nimport { getAllLinksList } from './store/links.selector';\nimport { linkActionTypes } from './store/links-actions';\nimport { authSelector } from '../Login_user/store/login-selector';\n\n@Component({\n  selector: 'app-links',\n  templateUrl: './links.component.html',\n  styleUrls: ['./links.component.scss']\n})\nexport class LinksComponent implements OnInit {\n\n  links$: any;\n  isLoggedIn: boolean;\n\n  constructor(private store: Store) {}\n\n  ngOnInit(): void {\n    this.store.dispatch(linkActionTypes.loadLinks()); // dispatch load links actions\n    this.store.select(getAllLinksList).subscribe(result =>  this.links$ = result); // get all links list\n    this.store.select(authSelector).subscribe(state => {\n      if (state) {\n        this.isLoggedIn = state.isAuthenticated;\n      }\n    }); // set isLoggedIn to true if logged in\n  }\n\n  // Delete Link function\n  deleteLink(linkId: number): void {\n    alert(\"delete called\");\n    this.store.dispatch(linkActionTypes.deleteLink({linkId})); // dispatch delete link action\n  }\n\n}\n",
+            "assetsDirs": [],
+            "styleUrlsData": [
+                {
+                    "data": "h1{\r\n  text-align: center;\r\n}\r\n\r\ntable {\r\n    border-collapse: collapse;\r\n    border-spacing: 0;\r\n    width: 90%;\r\n    border: 1px solid #ddd;\r\n    margin-left: 3%;\r\n  }\r\n  \r\n  th, td {\r\n    text-align: center;\r\n    padding: 8px;\r\n  }\r\n  \r\n  tr:nth-child(even){background-color: #f2f2f2}\r\n\r\n.addButton {\r\n    margin-left: 5%\r\n}",
+                    "styleUrl": "./links.component.scss"
+                }
+            ],
+            "stylesData": "",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "args": [
+                    {
+                        "name": "store",
+                        "type": "Store"
+                    }
+                ],
+                "line": 17,
+                "jsdoctags": [
+                    {
+                        "name": "store",
+                        "type": "Store",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            "implements": [
+                "OnInit"
+            ],
+            "templateData": "<h1>Link List</h1>\n<div>\n  <button *ngIf=\"isLoggedIn\" id=\"addLink\" class=\"btn buttonSuccess addButton\" routerLink=\"add-new-link\" routerLinkActive=\"active\">Add Link</button>\n</div>\n<br>\n<div style=\"overflow-x:auto;\">\n    <table>\n      \n        <tr>\n          <th>Title</th>\n          <th>Posted By</th>\n          <th>Link</th>\n          <th>Date</th>\n          <th *ngIf=\"isLoggedIn\">Actions</th>\n        </tr>\n      \n        <tr *ngFor=\"let link of links$\">\n          <td scope=\"row\">&nbsp;{{link.title}}</td>\n          <td>{{link.postby}}</td>\n          <td>{{link.website}}</td>\n          <td>&nbsp;{{link.date}}</td>\n          <td *ngIf=\"isLoggedIn\">\n            <button class=\"btn buttonPrimary\" [routerLink]=\"['add-new-link', link.id]\">Edit</button> &nbsp; &nbsp;\n            <button class=\"btn buttonDanger\" (click)=\"deleteLink(link.id)\">Delete</button>\n          </td>\n        </tr>\n      \n    </table>\n</div>\n"
+        },
+        {
+            "name": "LoginComponent",
+            "id": "component-LoginComponent-f4c823dea442eaf986b2548bde78cda8",
+            "file": "src/app/Login_user/login/login.component.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "app-login",
+            "styleUrls": [
+                "./login.component.scss"
+            ],
+            "styles": [],
+            "templateUrl": [
+                "./login.component.html"
+            ],
+            "viewProviders": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "propertiesClass": [
+                {
+                    "name": "error",
+                    "type": "any",
+                    "optional": false,
+                    "description": "",
+                    "line": 17
+                },
+                {
+                    "name": "form",
+                    "type": "FormGroup",
+                    "optional": false,
+                    "description": "",
+                    "line": 15
+                },
+                {
+                    "name": "loginResponse",
+                    "type": "any",
+                    "optional": false,
+                    "description": "",
+                    "line": 18
+                },
+                {
+                    "name": "submitted",
+                    "defaultValue": "false",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 16
+                }
+            ],
+            "methodsClass": [
+                {
+                    "name": "navigate",
+                    "args": [
+                        {
+                            "name": "response",
+                            "type": "any"
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 52,
+                    "jsdoctags": [
+                        {
+                            "name": "response",
+                            "type": "any",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "ngOnInit",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 26
+                },
+                {
+                    "name": "onSubmit",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 37
+                }
+            ],
+            "hostBindings": [],
+            "hostListeners": [],
+            "description": "",
+            "rawdescription": "",
+            "type": "component",
+            "sourceCode": "import { Component, OnInit } from '@angular/core';\nimport { Store } from '@ngrx/store';\nimport { FormGroup, FormBuilder, Validators } from '@angular/forms';\nimport { Router } from '@angular/router';\nimport { login } from '../store/login-actions';\nimport { authSelector } from '../store/login-selector';\n\n@Component({\n  selector: 'app-login',\n  templateUrl: './login.component.html',\n  styleUrls: ['./login.component.scss']\n})\nexport class LoginComponent implements OnInit {\n\n  form: FormGroup;\n  submitted = false;\n  error: any;\n  loginResponse: any;\n\n  constructor(\n      private formBuilder: FormBuilder,\n      private router: Router,\n      private store: Store\n  ) { }\n\n  ngOnInit(): void {\n    // Build Login Form\n      this.form = this.formBuilder.group({\n          email: ['', Validators.required],\n          password: ['', Validators.required]\n      });\n  }\n\n  get f(): any { return this.form.controls; }\n\n  // Login action function\n  onSubmit(): void {\n    this.submitted = true;\n    const payload = { email: this.f.email.value, password: this.f.password.value};\n    if (this.form.valid) {\n      this.store.dispatch(login({ user: payload})); // Dispatch Login Action\n      this.store.select(authSelector).subscribe(res =>  {\n        if (res) {\n          this.loginResponse = res; // LoginSuccess or LoginFailure Response\n          this.navigate(res); // call navigate\n        }\n      });\n    }\n  }\n\n  // Navigate/catch error\n  navigate(response: any): void {\n    if (response.loginToken) {\n      localStorage.setItem('accessToken', response.loginToken);\n      this.router.navigateByUrl('/home'); // If login success redirect to Home page\n    } else {\n        if (localStorage.getItem('accessToken')) {\n          localStorage.removeItem('accessToken');\n        }\n        this.error = response.message; // capture error\n    }\n  }\n\n}\n",
+            "assetsDirs": [],
+            "styleUrlsData": [
+                {
+                    "data": "button.btn {\r\n    font-size: 0.9rem;\r\n    line-height: 1.2;\r\n}\r\n",
+                    "styleUrl": "./login.component.scss"
+                }
+            ],
+            "stylesData": "",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "args": [
+                    {
+                        "name": "formBuilder",
+                        "type": "FormBuilder"
+                    },
+                    {
+                        "name": "router",
+                        "type": "Router"
+                    },
+                    {
+                        "name": "store",
+                        "type": "Store"
+                    }
+                ],
+                "line": 18,
+                "jsdoctags": [
+                    {
+                        "name": "formBuilder",
+                        "type": "FormBuilder",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    },
+                    {
+                        "name": "router",
+                        "type": "Router",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    },
+                    {
+                        "name": "store",
+                        "type": "Store",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            "implements": [
+                "OnInit"
+            ],
+            "accessors": {
+                "f": {
+                    "name": "f",
+                    "getSignature": {
+                        "name": "f",
+                        "type": "any",
+                        "returnType": "any",
+                        "line": 34
+                    }
+                }
+            },
+            "templateData": "<div class=\"containerPane\">\n    <div class=\"loginPane\">\n        <div class=\"loginContent\">\n        <h1 class=\"loginHeader\">Login</h1>\n        <hr>\n            <div class=\"loginDiv\">\n            <div class=\"alert-danger\" *ngIf=\"error\">{{error.error}}</div>\n                <form [formGroup]=\"form\">\n                    <div>\n                        <p for=\"username\">Username</p>\n                        <input type=\"text\" formControlName=\"email\" [ngClass]=\"{ 'is-invalid': submitted && f.email.errors }\" />\n                        <div *ngIf=\"submitted && f.email.errors\" class=\"alert-danger\">\n                            <div *ngIf=\"f.email.errors.required\">Username is required</div>\n                        </div>\n                    </div>\n                    <div>\n                        <p for=\"password\">Password</p>\n                        <input type=\"password\" formControlName=\"password\" [ngClass]=\"{ 'is-invalid': submitted && f.password.errors }\" />\n                        <div *ngIf=\"submitted && f.password.errors\" class=\"alert-danger\">\n                            <div *ngIf=\"f.password.errors.required\">Password is required</div>\n                        </div>\n                    </div>\n                    <br>\n                    <br>\n                    <div>\n                        <button class=\"btn buttonPrimary\" (click)=\"onSubmit()\">Login</button>&nbsp; &nbsp;\n                        <button class=\"btn buttonDanger\" routerLink=\"/home\">Cancel</button>\n                    </div>\n                </form>\n                <br>\n                <p>\n                    Don't have an account? Register <a routerLink=\"../register\">here</a>\n                </p>\n            </div>\n        </div>\n    </div>\n    </div>\n    \n    "
+        },
+        {
+            "name": "RegisterComponent",
+            "id": "component-RegisterComponent-ec5509ed33b7c8538495869e8b4bd08d",
+            "file": "src/app/Register_user/register/register.component.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "app-register",
+            "styleUrls": [
+                "./register.component.scss"
+            ],
+            "styles": [],
+            "templateUrl": [
+                "./register.component.html"
+            ],
+            "viewProviders": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "propertiesClass": [
+                {
+                    "name": "error",
+                    "type": "string",
+                    "optional": false,
+                    "description": "",
+                    "line": 20
+                },
+                {
+                    "name": "form",
+                    "type": "FormGroup",
+                    "optional": false,
+                    "description": "",
+                    "line": 16
+                },
+                {
+                    "name": "registerResponse",
+                    "type": "any",
+                    "optional": false,
+                    "description": "",
+                    "line": 19
+                },
+                {
+                    "name": "submitted",
+                    "defaultValue": "false",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 17
+                },
+                {
+                    "name": "user",
+                    "defaultValue": "new RegisterUser()",
+                    "type": "RegisterUser",
+                    "optional": false,
+                    "description": "",
+                    "line": 18
+                }
+            ],
+            "methodsClass": [
+                {
+                    "name": "navigate",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 64
+                },
+                {
+                    "name": "ngOnInit",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 24
+                },
+                {
+                    "name": "onSubmit",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 37
+                }
+            ],
+            "hostBindings": [],
+            "hostListeners": [],
+            "description": "",
+            "rawdescription": "",
+            "type": "component",
+            "sourceCode": "import { Component, OnInit } from '@angular/core';\nimport { Store } from '@ngrx/store';\nimport { Router } from '@angular/router';\nimport { Validators, FormBuilder, FormGroup } from '@angular/forms';\nimport { RegisterUser } from '../../models/register';\nimport * as RegisterActions from '../store/register-actions';\nimport { register } from '../store/register-actions';\n\n@Component({\n  selector: 'app-register',\n  templateUrl: './register.component.html',\n  styleUrls: ['./register.component.scss']\n})\nexport class RegisterComponent implements OnInit {\n\n  form: FormGroup;\n  submitted = false;\n  user: RegisterUser = new RegisterUser();\n  registerResponse: any;\n  error: string;\n\n  constructor(private store: Store, private router: Router, private formBuilder: FormBuilder) { }\n\n  ngOnInit(): void {\n    // Build Register Form\n    this.form = this.formBuilder.group({\n      firstname: ['', Validators.required],\n      lastname: ['', Validators.required],\n      email: ['', Validators.required],\n      password: ['', Validators.required]\n    });\n  }\n\n  get f(): any { return this.form.controls; }\n\n  // Register user actions\n  onSubmit(): void {\n    this.submitted = true;\n    // Register user payload\n    const payload = {\n      firstname: this.f.firstname.value,\n      lastname: this.f.lastname.value,\n      email: this.f.email.value,\n      password: this.f.password.value\n    };\n\n    if (this.form.valid) {\n      this.store.dispatch(RegisterActions.register({ user: payload})); // Dispatch register action\n      this.store.select(register).subscribe( response => {\n      this.registerResponse = response;\n      if (this.registerResponse.register.token) {\n        this.navigate(); // call navigate after successful registeration\n      } else {\n        if (this.registerResponse.register.message) {\n          this.error = this.registerResponse.register.message.error; // catch error\n          console.log(this.error);\n        }\n      }\n    });\n   }\n  }\n\n  // Navigate to login page function\n  navigate(): void {\n    window.location.href = '/login'; // redirect to login page\n  }\n\n}\n",
+            "assetsDirs": [],
+            "styleUrlsData": [
+                {
+                    "data": "button.btn {\r\n    font-size: 0.9rem;\r\n    line-height: 1.2;\r\n}\r\n\r\n.loginContent {\r\n    height: 77%;\r\n}\r\n\r\n.loginPane {\r\n    margin-top: 30px;\r\n}\r\n\r\n@media (min-width: 481px) and (max-width: 768px) {\r\n    .loginContent {\r\n        height: 60%;\r\n    }\r\n}\r\n\r\n@media (min-width: 360px) and (max-width: 480px) {\r\n    .loginContent {\r\n        height: 100%;\r\n    }\r\n}\r\n\r\n@media (min-width: 321px) and (max-width: 360px) {\r\n    .loginContent {\r\n        height: 100%;\r\n    }\r\n}",
+                    "styleUrl": "./register.component.scss"
+                }
+            ],
+            "stylesData": "",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "args": [
+                    {
+                        "name": "store",
+                        "type": "Store"
+                    },
+                    {
+                        "name": "router",
+                        "type": "Router"
+                    },
+                    {
+                        "name": "formBuilder",
+                        "type": "FormBuilder"
+                    }
+                ],
+                "line": 20,
+                "jsdoctags": [
+                    {
+                        "name": "store",
+                        "type": "Store",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    },
+                    {
+                        "name": "router",
+                        "type": "Router",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    },
+                    {
+                        "name": "formBuilder",
+                        "type": "FormBuilder",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            "implements": [
+                "OnInit"
+            ],
+            "accessors": {
+                "f": {
+                    "name": "f",
+                    "getSignature": {
+                        "name": "f",
+                        "type": "any",
+                        "returnType": "any",
+                        "line": 34
+                    }
+                }
+            },
+            "templateData": "<div class=\"containerPane\">\n    <div class=\"loginPane\">\n        <div class=\"loginContent\">\n        <h1 class=\"loginHeader\">Register</h1>\n        <hr>\n        <p class=\"alert-danger\">{{error}}</p>\n        <div class=\"loginDiv\">\n            <form [formGroup]=\"form\">\n                <div>\n                    <p for=\"firstname\">First Name</p>\n                    <input type=\"text\" formControlName=\"firstname\" [ngClass]=\"{ 'is-invalid': submitted && f.firstname.errors }\" />\n                    <div *ngIf=\"submitted && f.firstname.errors\" class=\"alert-danger\">\n                        <div *ngIf=\"f.firstname.errors.required\">First Name is required</div>\n                    </div>\n                </div>\n                <div>\n                    <p for=\"lastname\">Last Name</p>\n                    <input type=\"text\" formControlName=\"lastname\" [ngClass]=\"{ 'is-invalid': submitted && f.lastname.errors }\" />\n                    <div *ngIf=\"submitted && f.lastname.errors\" class=\"alert-danger\">\n                        <div *ngIf=\"f.lastname.errors.required\">First Name is required</div>\n                    </div>\n                </div>\n                <div>\n                    <p for=\"email\">Email ID</p>\n                    <input type=\"text\" formControlName=\"email\" [ngClass]=\"{ 'is-invalid': submitted && f.email.errors }\" />\n                    <div *ngIf=\"submitted && f.email.errors\" class=\"alert-danger\">\n                        <div *ngIf=\"f.email.errors.required\">First Name is required</div>\n                    </div>\n                </div>\n                <div>\n                    <p for=\"password\">Password</p>\n                    <input type=\"password\" formControlName=\"password\" [ngClass]=\"{ 'is-invalid': submitted && f.password.errors }\" />\n                    <div *ngIf=\"submitted && f.password.errors\" class=\"alert-danger\">\n                        <div *ngIf=\"f.password.errors.required\">Password is required</div>\n                    </div>\n                </div>\n                <br>\n                <div>\n                    <button  class=\"btn buttonPrimary\" (click)=\"onSubmit()\">Register</button> &nbsp; &nbsp;\n                    <button class=\"btn buttonDanger\" routerLink=\"/home\">Cancel</button>\n                </div>\n            </form>\n            <p>\n                Already have an account? <a routerLink=\"../login\">Login</a>\n            </p>\n        </div>\n        </div>\n    </div>\n    </div>"
+        }
+    ],
+    "modules": [
+        {
+            "name": "AppModule",
+            "children": [
+                {
+                    "type": "providers",
+                    "elements": [
+                        {
+                            "name": "ThemeService"
+                        }
+                    ]
+                },
+                {
+                    "type": "declarations",
+                    "elements": [
+                        {
+                            "name": "AppComponent"
+                        },
+                        {
+                            "name": "HeaderComponent"
+                        }
+                    ]
+                },
+                {
+                    "type": "imports",
+                    "elements": []
+                },
+                {
+                    "type": "exports",
+                    "elements": []
+                },
+                {
+                    "type": "bootstrap",
+                    "elements": [
+                        {
+                            "name": "AppComponent"
+                        }
+                    ]
+                },
+                {
+                    "type": "classes",
+                    "elements": []
+                }
+            ]
+        },
+        {
+            "name": "LinkRoutingModule",
+            "children": [
+                {
+                    "type": "providers",
+                    "elements": []
+                },
+                {
+                    "type": "declarations",
+                    "elements": []
+                },
+                {
+                    "type": "imports",
+                    "elements": []
+                },
+                {
+                    "type": "exports",
+                    "elements": []
+                },
+                {
+                    "type": "bootstrap",
+                    "elements": []
+                },
+                {
+                    "type": "classes",
+                    "elements": []
+                }
+            ]
+        },
+        {
+            "name": "LinksModule",
+            "children": [
+                {
+                    "type": "providers",
+                    "elements": [
+                        {
+                            "name": "LinksService"
+                        }
+                    ]
+                },
+                {
+                    "type": "declarations",
+                    "elements": [
+                        {
+                            "name": "AddNewLinkComponent"
+                        },
+                        {
+                            "name": "LinksComponent"
+                        }
+                    ]
+                },
+                {
+                    "type": "imports",
+                    "elements": [
+                        {
+                            "name": "LinkRoutingModule"
+                        }
+                    ]
+                },
+                {
+                    "type": "exports",
+                    "elements": [
+                        {
+                            "name": "AddNewLinkComponent"
+                        },
+                        {
+                            "name": "LinksComponent"
+                        }
+                    ]
+                },
+                {
+                    "type": "bootstrap",
+                    "elements": []
+                },
+                {
+                    "type": "classes",
+                    "elements": []
+                }
+            ]
+        },
+        {
+            "name": "LoginModule",
+            "children": [
+                {
+                    "type": "providers",
+                    "elements": []
+                },
+                {
+                    "type": "declarations",
+                    "elements": [
+                        {
+                            "name": "LoginComponent"
+                        }
+                    ]
+                },
+                {
+                    "type": "imports",
+                    "elements": [
+                        {
+                            "name": "LoginRoutingModule"
+                        }
+                    ]
+                },
+                {
+                    "type": "exports",
+                    "elements": []
+                },
+                {
+                    "type": "bootstrap",
+                    "elements": []
+                },
+                {
+                    "type": "classes",
+                    "elements": []
+                }
+            ]
+        },
+        {
+            "name": "LoginRoutingModule",
+            "children": [
+                {
+                    "type": "providers",
+                    "elements": []
+                },
+                {
+                    "type": "declarations",
+                    "elements": []
+                },
+                {
+                    "type": "imports",
+                    "elements": []
+                },
+                {
+                    "type": "exports",
+                    "elements": []
+                },
+                {
+                    "type": "bootstrap",
+                    "elements": []
+                },
+                {
+                    "type": "classes",
+                    "elements": []
+                }
+            ]
+        },
+        {
+            "name": "RegisterModule",
+            "children": [
+                {
+                    "type": "providers",
+                    "elements": []
+                },
+                {
+                    "type": "declarations",
+                    "elements": [
+                        {
+                            "name": "RegisterComponent"
+                        }
+                    ]
+                },
+                {
+                    "type": "imports",
+                    "elements": [
+                        {
+                            "name": "RegisterRoutingModule"
+                        }
+                    ]
+                },
+                {
+                    "type": "exports",
+                    "elements": []
+                },
+                {
+                    "type": "bootstrap",
+                    "elements": []
+                },
+                {
+                    "type": "classes",
+                    "elements": []
+                }
+            ]
+        },
+        {
+            "name": "RegisterRoutingModule",
+            "children": [
+                {
+                    "type": "providers",
+                    "elements": []
+                },
+                {
+                    "type": "declarations",
+                    "elements": []
+                },
+                {
+                    "type": "imports",
+                    "elements": []
+                },
+                {
+                    "type": "exports",
+                    "elements": []
+                },
+                {
+                    "type": "bootstrap",
+                    "elements": []
+                },
+                {
+                    "type": "classes",
+                    "elements": []
+                }
+            ]
+        }
+    ],
+    "miscellaneous": {
+        "variables": [
+            {
+                "name": "adapter",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/links/store/links-reducer.ts",
+                "type": "EntityAdapter<Link>",
+                "defaultValue": "createEntityAdapter<Link>()"
+            },
+            {
+                "name": "add",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/stories/addnewlink.stories.ts",
+                "type": "",
+                "defaultValue": "Template.bind({})"
+            },
+            {
+                "name": "addLink",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/links/store/links-actions.ts",
+                "type": "",
+                "defaultValue": "createAction(\r\n  '[Add Link Component] Add Link',\r\n  props<{link: Link}>()\r\n)"
+            },
+            {
+                "name": "AppRoutingModule",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/app-routing.module.ts",
+                "type": "",
+                "defaultValue": "RouterModule.forRoot(routes)"
+            },
+            {
+                "name": "authSelector",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/Login_user/store/login-selector.ts",
+                "type": "",
+                "defaultValue": "createSelector(getAuthReferenceState, state => state)"
+            },
+            {
+                "name": "darkTheme",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/services/theme.service.ts",
+                "type": "object",
+                "defaultValue": "{\n  'primary-color': '#484848',\n  'background-color': '#B0B0B0',\n  'text-color': 'white'\n}"
+            },
+            {
+                "name": "Default",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/stories/app.stories.ts",
+                "type": "",
+                "defaultValue": "Template.bind({})"
+            },
+            {
+                "name": "Default",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/stories/header.stories.ts",
+                "type": "",
+                "defaultValue": "Template.bind({})"
+            },
+            {
+                "name": "Default",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/stories/links.stories.ts",
+                "type": "",
+                "defaultValue": "Template.bind({})"
+            },
+            {
+                "name": "deleteLink",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/links/store/links-actions.ts",
+                "type": "",
+                "defaultValue": "createAction(\r\n  '[Links List Operations] Delete Link',\r\n  props<{linkId: number}>()\r\n)"
+            },
+            {
+                "name": "edit",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/stories/addnewlink.stories.ts",
+                "type": "",
+                "defaultValue": "Template.bind({})"
+            },
+            {
+                "name": "environment",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/environments/environment.prod.ts",
+                "type": "object",
+                "defaultValue": "{\n  production: true\n}"
+            },
+            {
+                "name": "environment",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/environments/environment.ts",
+                "type": "object",
+                "defaultValue": "{\n  production: false,\n  apiUrl: 'http://localhost:3000',\n  linksUrl: 'http://localhost:3000/linksList',\n  loginUrl: 'http://localhost:3000/login',\n  registerUrl: 'http://localhost:3000/register'\n}"
+            },
+            {
+                "name": "getAllLinksList",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/links/store/links.selector.ts",
+                "type": "",
+                "defaultValue": "createSelector(\r\n  linksFeatureSelector,\r\n  selectAll\r\n)"
+            },
+            {
+                "name": "getAuthReferenceState",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/Login_user/store/login-selector.ts",
+                "type": "",
+                "defaultValue": "createFeatureSelector<AuthState>('user')"
+            },
+            {
+                "name": "getCurrentLinkId",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/links/store/links.selector.ts",
+                "type": "",
+                "defaultValue": "createSelector(\r\n    linksFeatureSelector,\r\n    (state: LinkState) => state.selectedLinkId\r\n)"
+            },
+            {
+                "name": "getLinkDetails",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/links/store/links.selector.ts",
+                "type": "",
+                "defaultValue": "createSelector(\r\n  linksFeatureSelector,\r\n  selectAll\r\n)"
+            },
+            {
+                "name": "getRegisterReferenceState",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/Register_user/store/register-selector.ts",
+                "type": "",
+                "defaultValue": "createFeatureSelector<RegisterState>('register')"
+            },
+            {
+                "name": "initialState",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/links/store/links-reducer.ts",
+                "type": "",
+                "defaultValue": "adapter.getInitialState({\r\n  linksLoaded: false,\r\n  selectedLinkId: null\r\n})"
+            },
+            {
+                "name": "initialState",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/Login_user/store/login-reducer.ts",
+                "type": "AuthState",
+                "defaultValue": "{\r\n  isAuthenticated : false,\r\n  loginToken : null,\r\n  message : null,\r\n}"
+            },
+            {
+                "name": "initialState",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/Register_user/store/register-reducer.ts",
+                "type": "RegisterState",
+                "defaultValue": "{\r\n  isRegistered: false,\r\n  user: null,\r\n  token : null,\r\n  message : null\r\n}"
+            },
+            {
+                "name": "lightTheme",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/services/theme.service.ts",
+                "type": "object",
+                "defaultValue": "{\n  'primary-color': '#3c5be7da',\n  'background-color': 'white',\n  'text-color': 'white'\n}"
+            },
+            {
+                "name": "linkActionTypes",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/links/store/links-actions.ts",
+                "type": "object",
+                "defaultValue": "{\r\n  loadLinks,\r\n  linksLoaded,\r\n  addLink,\r\n  deleteLink,\r\n  updateLink,\r\n  loadLink,\r\n  linkLoaded\r\n}"
+            },
+            {
+                "name": "linkList",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/stories/addnewlink.stories.ts",
+                "type": "object",
+                "defaultValue": "{\r\n    id: 1,\r\n    title: 'JavaTpoint',\r\n    postby: 'James',\r\n    website: 'https://www.javatpoint.com/',\r\n    date: '10 January 2020'\r\n}"
+            },
+            {
+                "name": "linkLoaded",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/links/store/links-actions.ts",
+                "type": "",
+                "defaultValue": "createAction(\r\n  '[Link Effect] Link Loaded Successfully',\r\n  props<{link: Link[]}>()\r\n)"
+            },
+            {
+                "name": "linkReducer",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/links/store/links-reducer.ts",
+                "type": "",
+                "defaultValue": "createReducer(\r\n  initialState,\r\n\r\n  // links loaded reducer\r\n  on(linkActionTypes.linksLoaded, (state, action) => {\r\n    return adapter.setAll(\r\n      action.links,\r\n      {...state, linksLoaded: true}\r\n    );\r\n  }),\r\n\r\n  // link loaded reducer\r\n  on(linkActionTypes.linkLoaded, (state, action) => {\r\n    return adapter.setAll(\r\n      action.link,\r\n      {...state, linkLoaded: true}\r\n    );\r\n  }),\r\n\r\n  // add link reducer\r\n  on(linkActionTypes.addLink, (state, action) => {\r\n    return adapter.addOne(action.link, state);\r\n  }),\r\n\r\n  // delete link reducer\r\n  on(linkActionTypes.deleteLink, (state, action) => {\r\n    return adapter.removeOne(action.linkId, state);\r\n  }),\r\n\r\n  // update link reducer\r\n  on(linkActionTypes.updateLink, (state, action) => {\r\n    return adapter.updateOne(action.update, state);\r\n  })\r\n)"
+            },
+            {
+                "name": "linksFeatureSelector",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/links/store/links.selector.ts",
+                "type": "",
+                "defaultValue": "createFeatureSelector<LinkState>('links')"
+            },
+            {
+                "name": "linksList",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/stories/links.stories.ts",
+                "type": "[]",
+                "defaultValue": "[\r\n    {\r\n        id: 1,\r\n        title: \"Google\",\r\n        postby: \"XYZ\",\r\n        website: \"www.google.com\",\r\n        date: \"4 January 2020\"\r\n      },\r\n      {\r\n        id: 2,\r\n        title: \"MDN\",\r\n        postby: \"ABC\",\r\n        website: \"https://developer.mozilla.org/en-US\",\r\n        date: \"12 January 1994\"\r\n      }\r\n]"
+            },
+            {
+                "name": "linksLoaded",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/links/store/links-actions.ts",
+                "type": "",
+                "defaultValue": "createAction(\r\n  '[Links Effect] Links Loaded Successfully',\r\n  props<{links: Link[]}>()\r\n)"
+            },
+            {
+                "name": "linksModule",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/app-routing.module.ts",
+                "type": "",
+                "defaultValue": "() => import('./links/links.module').then(x => x.LinksModule)"
+            },
+            {
+                "name": "linksModule",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/stories/app.stories.ts",
+                "type": "",
+                "defaultValue": "() => import('../app/links/links.module').then(x => x.LinksModule)"
+            },
+            {
+                "name": "loadLink",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/links/store/links-actions.ts",
+                "type": "",
+                "defaultValue": "createAction(\r\n  '[Link List] Link Link via Service',\r\n  props<{linkId: string | number}>()\r\n  )"
+            },
+            {
+                "name": "loadLinks",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/links/store/links-actions.ts",
+                "type": "",
+                "defaultValue": "createAction(\r\n'[Links List] Load Links List via Service',\r\n)"
+            },
+            {
+                "name": "login",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/stories/login.stories.ts",
+                "type": "",
+                "defaultValue": "Template.bind({})"
+            },
+            {
+                "name": "login",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/Login_user/store/login-actions.ts",
+                "type": "",
+                "defaultValue": "createAction('[Auth] Login', props<{ user: User }>())"
+            },
+            {
+                "name": "LoginError",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/stories/login.stories.ts",
+                "type": "",
+                "defaultValue": "Template.bind({})"
+            },
+            {
+                "name": "loginFailure",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/Login_user/store/login-actions.ts",
+                "type": "",
+                "defaultValue": "createAction('[Auth] Login Failure', props<{error}>())"
+            },
+            {
+                "name": "loginModule",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/app-routing.module.ts",
+                "type": "",
+                "defaultValue": "() => import('./Login_user/login.module').then(x => x.LoginModule)"
+            },
+            {
+                "name": "loginModule",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/stories/app.stories.ts",
+                "type": "",
+                "defaultValue": "() => import('../app/Login_user/login.module').then(x => x.LoginModule)"
+            },
+            {
+                "name": "loginSuccess",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/Login_user/store/login-actions.ts",
+                "type": "",
+                "defaultValue": "createAction('[Auth] Login Success', props<{accessToken}>())"
+            },
+            {
+                "name": "mock",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/test.ts",
+                "type": "",
+                "defaultValue": "() => {\n  let storage: { [key: string]: string } = {};\n  return {\n    getItem: (key: string) => (key in storage ? storage[key] : null),\n    setItem: (key: string, value: string) => (storage[key] = value || ''),\n    removeItem: (key: string) => delete storage[key],\n    clear: () => (storage = {})\n  };\n}"
+            },
+            {
+                "name": "register",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/stories/register.stories.ts",
+                "type": "",
+                "defaultValue": "Template.bind({})"
+            },
+            {
+                "name": "register",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/Register_user/store/register-actions.ts",
+                "type": "",
+                "defaultValue": "createAction('[Auth] Register', props<{ user: RegisterUser }>())"
+            },
+            {
+                "name": "RegisterError",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/stories/register.stories.ts",
+                "type": "",
+                "defaultValue": "Template.bind({})"
+            },
+            {
+                "name": "registerFailure",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/Register_user/store/register-actions.ts",
+                "type": "",
+                "defaultValue": "createAction('[Auth] Register Failure', props<{error}>())"
+            },
+            {
+                "name": "registerModule",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/app-routing.module.ts",
+                "type": "",
+                "defaultValue": "() => import('./Register_user/register.module').then(x => x.RegisterModule)"
+            },
+            {
+                "name": "registerModule",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/stories/app.stories.ts",
+                "type": "",
+                "defaultValue": "() => import('../app/Register_user/register.module').then(x => x.RegisterModule)"
+            },
+            {
+                "name": "registerReducer",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/Register_user/store/register-reducer.ts",
+                "type": "",
+                "defaultValue": "createReducer(\r\n    initialState,\r\n    // Register reducer\r\n    on(RegisterActions.register, (state, action) => {\r\n            return {\r\n            ...state,\r\n            isRegistered : false,\r\n            user : action.user,\r\n            token : null,\r\n            message : null\r\n        };\r\n    }),\r\n\r\n    // RegisterSuccess reducer\r\n    on(RegisterActions.registerSuccess, (state, action) => {\r\n        return {\r\n            ...state,\r\n            isRegistered : true,\r\n            user : null,\r\n            token : action.accessToken.accessToken,\r\n            message : null,\r\n        };\r\n    }),\r\n\r\n    // RegisterFailuer reducer\r\n    on(RegisterActions.registerFailure, (state, action) => {\r\n        return {\r\n            ...state,\r\n            isRegistered : false,\r\n            user : null,\r\n            token : null,\r\n            message : action.error,\r\n        };\r\n    })\r\n)"
+            },
+            {
+                "name": "registerSelector",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/Register_user/store/register-selector.ts",
+                "type": "",
+                "defaultValue": "createSelector(getRegisterReferenceState, state => state)"
+            },
+            {
+                "name": "registerSuccess",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/Register_user/store/register-actions.ts",
+                "type": "",
+                "defaultValue": "createAction('[Auth] Register Success', props<{accessToken}>())"
+            },
+            {
+                "name": "Template",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/stories/addnewlink.stories.ts",
+                "type": "Story<AddNewLinkComponent>",
+                "defaultValue": "(args: AddNewLinkComponent) => ({\r\n    component: AddNewLinkComponent,\r\n    moduleMetadata: {\r\n        declarations: [AddNewLinkComponent],\r\n        imports: [\r\n          CommonModule,\r\n          HttpClientModule,\r\n          FormsModule,\r\n          ReactiveFormsModule,\r\n          RouterTestingModule,\r\n          StoreModule.forRoot({}),\r\n          EffectsModule.forRoot([])\r\n        ],\r\n        providers: [LinksService],\r\n        schemas: [CUSTOM_ELEMENTS_SCHEMA]\r\n    },\r\n    props: args\r\n})"
+            },
+            {
+                "name": "Template",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/stories/app.stories.ts",
+                "type": "Story<AppComponent>",
+                "defaultValue": "(args: AppComponent) => ({\r\n    component: AppComponent,\r\n    templateUrl: '../app/app.component.html',\r\n    styleUrls: ['../app/app.component.scss'],\r\n    moduleMetadata: {\r\n        declarations: [\r\n            AppComponent,\r\n            HeaderComponent\r\n        ],\r\n        imports: [\r\n            CommonModule,\r\n            BrowserModule,\r\n            AppRoutingModule,\r\n            FormsModule,\r\n            ReactiveFormsModule,\r\n            HttpClientModule,\r\n            RouterModule.forRoot([], { useHash: true }),\r\n            StoreModule.forRoot({user: userReducer, register: registerReducer}),\r\n            EffectsModule.forRoot([UserEffects, RegisterEffects]),\r\n            BrowserAnimationsModule\r\n        ],\r\n        providers: [\r\n            { provide: APP_BASE_HREF, useValue: '/' },\r\n            ThemeService\r\n        ],\r\n        schemas: [CUSTOM_ELEMENTS_SCHEMA],\r\n    },\r\n    props: { args },\r\n})"
+            },
+            {
+                "name": "Template",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/stories/header.stories.ts",
+                "type": "Story<HeaderComponent>",
+                "defaultValue": "(args: HeaderComponent) => ({\r\n  component: HeaderComponent,\r\n  props: args\r\n})"
+            },
+            {
+                "name": "Template",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/stories/links.stories.ts",
+                "type": "Story<LinksComponent>",
+                "defaultValue": "(args: LinksComponent) => ({\r\n    component: LinksComponent,\r\n    templateUrl: '../app/links/links.component.html',\r\n    styleUrls: ['../app/links/links.component.scss'],\r\n    moduleMetadata: {\r\n        declarations: [LinksComponent, AddNewLinkComponent],\r\n        imports: [\r\n          CommonModule,\r\n          HttpClientModule,\r\n          FormsModule,\r\n          ReactiveFormsModule,\r\n          RouterTestingModule\r\n        ],\r\n        providers: [LinksService],\r\n        schemas: [CUSTOM_ELEMENTS_SCHEMA]\r\n    },\r\n    props: { args, links$: linksList },\r\n})"
+            },
+            {
+                "name": "Template",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/stories/login.stories.ts",
+                "type": "Story<LoginComponent>",
+                "defaultValue": "(args: LoginComponent) => ({\r\n  component: LoginComponent,\r\n  props: args\r\n})"
+            },
+            {
+                "name": "Template",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/stories/register.stories.ts",
+                "type": "Story<RegisterComponent>",
+                "defaultValue": "(args: RegisterComponent) => ({\r\n  component: RegisterComponent,\r\n  props: args\r\n})"
+            },
+            {
+                "name": "updateLink",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/links/store/links-actions.ts",
+                "type": "",
+                "defaultValue": "createAction(\r\n  '[Links List Operations] Update Link',\r\n  props<{update: Update<Link>}>()\r\n)"
+            },
+            {
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/links/store/links-reducer.ts",
+                "type": "",
+                "defaultValue": "adapter.getSelectors()"
+            },
+            {
+                "name": "userReducer",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/Login_user/store/login-reducer.ts",
+                "type": "",
+                "defaultValue": "createReducer(\r\n    initialState,\r\n    // Login Reducer\r\n    on(LoginActions.login, (state, action) => {\r\n            return {\r\n            ...state,\r\n            isAuthenticated : false,\r\n            loginToken : null,\r\n            message: null\r\n        };\r\n    }),\r\n\r\n    // LoginSuccess Reducer\r\n    on(LoginActions.loginSuccess, (state, action) => {\r\n        return {\r\n            ...state,\r\n            isAuthenticated : true,\r\n            loginToken : action.accessToken.accessToken,\r\n            message : null\r\n        };\r\n    }),\r\n\r\n    // LoginFailure reducer\r\n    on(LoginActions.loginFailure, (state, action) => {\r\n        return {\r\n            ...state,\r\n            isAuthenticated : false,\r\n            loginToken : null,\r\n            message : action.error,\r\n        };\r\n    }),\r\n\r\n)"
+            }
+        ],
+        "functions": [],
+        "typealiases": [],
+        "enumerations": [],
+        "groupedVariables": {
+            "src/app/links/store/links-reducer.ts": [
+                {
+                    "name": "adapter",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/links/store/links-reducer.ts",
+                    "type": "EntityAdapter<Link>",
+                    "defaultValue": "createEntityAdapter<Link>()"
+                },
+                {
+                    "name": "initialState",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/links/store/links-reducer.ts",
+                    "type": "",
+                    "defaultValue": "adapter.getInitialState({\r\n  linksLoaded: false,\r\n  selectedLinkId: null\r\n})"
+                },
+                {
+                    "name": "linkReducer",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/links/store/links-reducer.ts",
+                    "type": "",
+                    "defaultValue": "createReducer(\r\n  initialState,\r\n\r\n  // links loaded reducer\r\n  on(linkActionTypes.linksLoaded, (state, action) => {\r\n    return adapter.setAll(\r\n      action.links,\r\n      {...state, linksLoaded: true}\r\n    );\r\n  }),\r\n\r\n  // link loaded reducer\r\n  on(linkActionTypes.linkLoaded, (state, action) => {\r\n    return adapter.setAll(\r\n      action.link,\r\n      {...state, linkLoaded: true}\r\n    );\r\n  }),\r\n\r\n  // add link reducer\r\n  on(linkActionTypes.addLink, (state, action) => {\r\n    return adapter.addOne(action.link, state);\r\n  }),\r\n\r\n  // delete link reducer\r\n  on(linkActionTypes.deleteLink, (state, action) => {\r\n    return adapter.removeOne(action.linkId, state);\r\n  }),\r\n\r\n  // update link reducer\r\n  on(linkActionTypes.updateLink, (state, action) => {\r\n    return adapter.updateOne(action.update, state);\r\n  })\r\n)"
+                },
+                {
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/links/store/links-reducer.ts",
+                    "type": "",
+                    "defaultValue": "adapter.getSelectors()"
+                }
+            ],
+            "src/stories/addnewlink.stories.ts": [
+                {
+                    "name": "add",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/stories/addnewlink.stories.ts",
+                    "type": "",
+                    "defaultValue": "Template.bind({})"
+                },
+                {
+                    "name": "edit",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/stories/addnewlink.stories.ts",
+                    "type": "",
+                    "defaultValue": "Template.bind({})"
+                },
+                {
+                    "name": "linkList",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/stories/addnewlink.stories.ts",
+                    "type": "object",
+                    "defaultValue": "{\r\n    id: 1,\r\n    title: 'JavaTpoint',\r\n    postby: 'James',\r\n    website: 'https://www.javatpoint.com/',\r\n    date: '10 January 2020'\r\n}"
+                },
+                {
+                    "name": "Template",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/stories/addnewlink.stories.ts",
+                    "type": "Story<AddNewLinkComponent>",
+                    "defaultValue": "(args: AddNewLinkComponent) => ({\r\n    component: AddNewLinkComponent,\r\n    moduleMetadata: {\r\n        declarations: [AddNewLinkComponent],\r\n        imports: [\r\n          CommonModule,\r\n          HttpClientModule,\r\n          FormsModule,\r\n          ReactiveFormsModule,\r\n          RouterTestingModule,\r\n          StoreModule.forRoot({}),\r\n          EffectsModule.forRoot([])\r\n        ],\r\n        providers: [LinksService],\r\n        schemas: [CUSTOM_ELEMENTS_SCHEMA]\r\n    },\r\n    props: args\r\n})"
+                }
+            ],
+            "src/app/links/store/links-actions.ts": [
+                {
+                    "name": "addLink",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/links/store/links-actions.ts",
+                    "type": "",
+                    "defaultValue": "createAction(\r\n  '[Add Link Component] Add Link',\r\n  props<{link: Link}>()\r\n)"
+                },
+                {
+                    "name": "deleteLink",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/links/store/links-actions.ts",
+                    "type": "",
+                    "defaultValue": "createAction(\r\n  '[Links List Operations] Delete Link',\r\n  props<{linkId: number}>()\r\n)"
+                },
+                {
+                    "name": "linkActionTypes",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/links/store/links-actions.ts",
+                    "type": "object",
+                    "defaultValue": "{\r\n  loadLinks,\r\n  linksLoaded,\r\n  addLink,\r\n  deleteLink,\r\n  updateLink,\r\n  loadLink,\r\n  linkLoaded\r\n}"
+                },
+                {
+                    "name": "linkLoaded",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/links/store/links-actions.ts",
+                    "type": "",
+                    "defaultValue": "createAction(\r\n  '[Link Effect] Link Loaded Successfully',\r\n  props<{link: Link[]}>()\r\n)"
+                },
+                {
+                    "name": "linksLoaded",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/links/store/links-actions.ts",
+                    "type": "",
+                    "defaultValue": "createAction(\r\n  '[Links Effect] Links Loaded Successfully',\r\n  props<{links: Link[]}>()\r\n)"
+                },
+                {
+                    "name": "loadLink",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/links/store/links-actions.ts",
+                    "type": "",
+                    "defaultValue": "createAction(\r\n  '[Link List] Link Link via Service',\r\n  props<{linkId: string | number}>()\r\n  )"
+                },
+                {
+                    "name": "loadLinks",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/links/store/links-actions.ts",
+                    "type": "",
+                    "defaultValue": "createAction(\r\n'[Links List] Load Links List via Service',\r\n)"
+                },
+                {
+                    "name": "updateLink",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/links/store/links-actions.ts",
+                    "type": "",
+                    "defaultValue": "createAction(\r\n  '[Links List Operations] Update Link',\r\n  props<{update: Update<Link>}>()\r\n)"
+                }
+            ],
+            "src/app/app-routing.module.ts": [
+                {
+                    "name": "AppRoutingModule",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/app-routing.module.ts",
+                    "type": "",
+                    "defaultValue": "RouterModule.forRoot(routes)"
+                },
+                {
+                    "name": "linksModule",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/app-routing.module.ts",
+                    "type": "",
+                    "defaultValue": "() => import('./links/links.module').then(x => x.LinksModule)"
+                },
+                {
+                    "name": "loginModule",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/app-routing.module.ts",
+                    "type": "",
+                    "defaultValue": "() => import('./Login_user/login.module').then(x => x.LoginModule)"
+                },
+                {
+                    "name": "registerModule",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/app-routing.module.ts",
+                    "type": "",
+                    "defaultValue": "() => import('./Register_user/register.module').then(x => x.RegisterModule)"
+                }
+            ],
+            "src/app/Login_user/store/login-selector.ts": [
+                {
+                    "name": "authSelector",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/Login_user/store/login-selector.ts",
+                    "type": "",
+                    "defaultValue": "createSelector(getAuthReferenceState, state => state)"
+                },
+                {
+                    "name": "getAuthReferenceState",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/Login_user/store/login-selector.ts",
+                    "type": "",
+                    "defaultValue": "createFeatureSelector<AuthState>('user')"
+                }
+            ],
+            "src/app/services/theme.service.ts": [
+                {
+                    "name": "darkTheme",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/services/theme.service.ts",
+                    "type": "object",
+                    "defaultValue": "{\n  'primary-color': '#484848',\n  'background-color': '#B0B0B0',\n  'text-color': 'white'\n}"
+                },
+                {
+                    "name": "lightTheme",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/services/theme.service.ts",
+                    "type": "object",
+                    "defaultValue": "{\n  'primary-color': '#3c5be7da',\n  'background-color': 'white',\n  'text-color': 'white'\n}"
+                }
+            ],
+            "src/stories/app.stories.ts": [
+                {
+                    "name": "Default",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/stories/app.stories.ts",
+                    "type": "",
+                    "defaultValue": "Template.bind({})"
+                },
+                {
+                    "name": "linksModule",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/stories/app.stories.ts",
+                    "type": "",
+                    "defaultValue": "() => import('../app/links/links.module').then(x => x.LinksModule)"
+                },
+                {
+                    "name": "loginModule",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/stories/app.stories.ts",
+                    "type": "",
+                    "defaultValue": "() => import('../app/Login_user/login.module').then(x => x.LoginModule)"
+                },
+                {
+                    "name": "registerModule",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/stories/app.stories.ts",
+                    "type": "",
+                    "defaultValue": "() => import('../app/Register_user/register.module').then(x => x.RegisterModule)"
+                },
+                {
+                    "name": "Template",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/stories/app.stories.ts",
+                    "type": "Story<AppComponent>",
+                    "defaultValue": "(args: AppComponent) => ({\r\n    component: AppComponent,\r\n    templateUrl: '../app/app.component.html',\r\n    styleUrls: ['../app/app.component.scss'],\r\n    moduleMetadata: {\r\n        declarations: [\r\n            AppComponent,\r\n            HeaderComponent\r\n        ],\r\n        imports: [\r\n            CommonModule,\r\n            BrowserModule,\r\n            AppRoutingModule,\r\n            FormsModule,\r\n            ReactiveFormsModule,\r\n            HttpClientModule,\r\n            RouterModule.forRoot([], { useHash: true }),\r\n            StoreModule.forRoot({user: userReducer, register: registerReducer}),\r\n            EffectsModule.forRoot([UserEffects, RegisterEffects]),\r\n            BrowserAnimationsModule\r\n        ],\r\n        providers: [\r\n            { provide: APP_BASE_HREF, useValue: '/' },\r\n            ThemeService\r\n        ],\r\n        schemas: [CUSTOM_ELEMENTS_SCHEMA],\r\n    },\r\n    props: { args },\r\n})"
+                }
+            ],
+            "src/stories/header.stories.ts": [
+                {
+                    "name": "Default",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/stories/header.stories.ts",
+                    "type": "",
+                    "defaultValue": "Template.bind({})"
+                },
+                {
+                    "name": "Template",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/stories/header.stories.ts",
+                    "type": "Story<HeaderComponent>",
+                    "defaultValue": "(args: HeaderComponent) => ({\r\n  component: HeaderComponent,\r\n  props: args\r\n})"
+                }
+            ],
+            "src/stories/links.stories.ts": [
+                {
+                    "name": "Default",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/stories/links.stories.ts",
+                    "type": "",
+                    "defaultValue": "Template.bind({})"
+                },
+                {
+                    "name": "linksList",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/stories/links.stories.ts",
+                    "type": "[]",
+                    "defaultValue": "[\r\n    {\r\n        id: 1,\r\n        title: \"Google\",\r\n        postby: \"XYZ\",\r\n        website: \"www.google.com\",\r\n        date: \"4 January 2020\"\r\n      },\r\n      {\r\n        id: 2,\r\n        title: \"MDN\",\r\n        postby: \"ABC\",\r\n        website: \"https://developer.mozilla.org/en-US\",\r\n        date: \"12 January 1994\"\r\n      }\r\n]"
+                },
+                {
+                    "name": "Template",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/stories/links.stories.ts",
+                    "type": "Story<LinksComponent>",
+                    "defaultValue": "(args: LinksComponent) => ({\r\n    component: LinksComponent,\r\n    templateUrl: '../app/links/links.component.html',\r\n    styleUrls: ['../app/links/links.component.scss'],\r\n    moduleMetadata: {\r\n        declarations: [LinksComponent, AddNewLinkComponent],\r\n        imports: [\r\n          CommonModule,\r\n          HttpClientModule,\r\n          FormsModule,\r\n          ReactiveFormsModule,\r\n          RouterTestingModule\r\n        ],\r\n        providers: [LinksService],\r\n        schemas: [CUSTOM_ELEMENTS_SCHEMA]\r\n    },\r\n    props: { args, links$: linksList },\r\n})"
+                }
+            ],
+            "src/environments/environment.prod.ts": [
+                {
+                    "name": "environment",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/environments/environment.prod.ts",
+                    "type": "object",
+                    "defaultValue": "{\n  production: true\n}"
+                }
+            ],
+            "src/environments/environment.ts": [
+                {
+                    "name": "environment",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/environments/environment.ts",
+                    "type": "object",
+                    "defaultValue": "{\n  production: false,\n  apiUrl: 'http://localhost:3000',\n  linksUrl: 'http://localhost:3000/linksList',\n  loginUrl: 'http://localhost:3000/login',\n  registerUrl: 'http://localhost:3000/register'\n}"
+                }
+            ],
+            "src/app/links/store/links.selector.ts": [
+                {
+                    "name": "getAllLinksList",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/links/store/links.selector.ts",
+                    "type": "",
+                    "defaultValue": "createSelector(\r\n  linksFeatureSelector,\r\n  selectAll\r\n)"
+                },
+                {
+                    "name": "getCurrentLinkId",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/links/store/links.selector.ts",
+                    "type": "",
+                    "defaultValue": "createSelector(\r\n    linksFeatureSelector,\r\n    (state: LinkState) => state.selectedLinkId\r\n)"
+                },
+                {
+                    "name": "getLinkDetails",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/links/store/links.selector.ts",
+                    "type": "",
+                    "defaultValue": "createSelector(\r\n  linksFeatureSelector,\r\n  selectAll\r\n)"
+                },
+                {
+                    "name": "linksFeatureSelector",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/links/store/links.selector.ts",
+                    "type": "",
+                    "defaultValue": "createFeatureSelector<LinkState>('links')"
+                }
+            ],
+            "src/app/Register_user/store/register-selector.ts": [
+                {
+                    "name": "getRegisterReferenceState",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/Register_user/store/register-selector.ts",
+                    "type": "",
+                    "defaultValue": "createFeatureSelector<RegisterState>('register')"
+                },
+                {
+                    "name": "registerSelector",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/Register_user/store/register-selector.ts",
+                    "type": "",
+                    "defaultValue": "createSelector(getRegisterReferenceState, state => state)"
+                }
+            ],
+            "src/app/Login_user/store/login-reducer.ts": [
+                {
+                    "name": "initialState",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/Login_user/store/login-reducer.ts",
+                    "type": "AuthState",
+                    "defaultValue": "{\r\n  isAuthenticated : false,\r\n  loginToken : null,\r\n  message : null,\r\n}"
+                },
+                {
+                    "name": "userReducer",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/Login_user/store/login-reducer.ts",
+                    "type": "",
+                    "defaultValue": "createReducer(\r\n    initialState,\r\n    // Login Reducer\r\n    on(LoginActions.login, (state, action) => {\r\n            return {\r\n            ...state,\r\n            isAuthenticated : false,\r\n            loginToken : null,\r\n            message: null\r\n        };\r\n    }),\r\n\r\n    // LoginSuccess Reducer\r\n    on(LoginActions.loginSuccess, (state, action) => {\r\n        return {\r\n            ...state,\r\n            isAuthenticated : true,\r\n            loginToken : action.accessToken.accessToken,\r\n            message : null\r\n        };\r\n    }),\r\n\r\n    // LoginFailure reducer\r\n    on(LoginActions.loginFailure, (state, action) => {\r\n        return {\r\n            ...state,\r\n            isAuthenticated : false,\r\n            loginToken : null,\r\n            message : action.error,\r\n        };\r\n    }),\r\n\r\n)"
+                }
+            ],
+            "src/app/Register_user/store/register-reducer.ts": [
+                {
+                    "name": "initialState",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/Register_user/store/register-reducer.ts",
+                    "type": "RegisterState",
+                    "defaultValue": "{\r\n  isRegistered: false,\r\n  user: null,\r\n  token : null,\r\n  message : null\r\n}"
+                },
+                {
+                    "name": "registerReducer",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/Register_user/store/register-reducer.ts",
+                    "type": "",
+                    "defaultValue": "createReducer(\r\n    initialState,\r\n    // Register reducer\r\n    on(RegisterActions.register, (state, action) => {\r\n            return {\r\n            ...state,\r\n            isRegistered : false,\r\n            user : action.user,\r\n            token : null,\r\n            message : null\r\n        };\r\n    }),\r\n\r\n    // RegisterSuccess reducer\r\n    on(RegisterActions.registerSuccess, (state, action) => {\r\n        return {\r\n            ...state,\r\n            isRegistered : true,\r\n            user : null,\r\n            token : action.accessToken.accessToken,\r\n            message : null,\r\n        };\r\n    }),\r\n\r\n    // RegisterFailuer reducer\r\n    on(RegisterActions.registerFailure, (state, action) => {\r\n        return {\r\n            ...state,\r\n            isRegistered : false,\r\n            user : null,\r\n            token : null,\r\n            message : action.error,\r\n        };\r\n    })\r\n)"
+                }
+            ],
+            "src/stories/login.stories.ts": [
+                {
+                    "name": "login",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/stories/login.stories.ts",
+                    "type": "",
+                    "defaultValue": "Template.bind({})"
+                },
+                {
+                    "name": "LoginError",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/stories/login.stories.ts",
+                    "type": "",
+                    "defaultValue": "Template.bind({})"
+                },
+                {
+                    "name": "Template",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/stories/login.stories.ts",
+                    "type": "Story<LoginComponent>",
+                    "defaultValue": "(args: LoginComponent) => ({\r\n  component: LoginComponent,\r\n  props: args\r\n})"
+                }
+            ],
+            "src/app/Login_user/store/login-actions.ts": [
+                {
+                    "name": "login",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/Login_user/store/login-actions.ts",
+                    "type": "",
+                    "defaultValue": "createAction('[Auth] Login', props<{ user: User }>())"
+                },
+                {
+                    "name": "loginFailure",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/Login_user/store/login-actions.ts",
+                    "type": "",
+                    "defaultValue": "createAction('[Auth] Login Failure', props<{error}>())"
+                },
+                {
+                    "name": "loginSuccess",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/Login_user/store/login-actions.ts",
+                    "type": "",
+                    "defaultValue": "createAction('[Auth] Login Success', props<{accessToken}>())"
+                }
+            ],
+            "src/test.ts": [
+                {
+                    "name": "mock",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/test.ts",
+                    "type": "",
+                    "defaultValue": "() => {\n  let storage: { [key: string]: string } = {};\n  return {\n    getItem: (key: string) => (key in storage ? storage[key] : null),\n    setItem: (key: string, value: string) => (storage[key] = value || ''),\n    removeItem: (key: string) => delete storage[key],\n    clear: () => (storage = {})\n  };\n}"
+                }
+            ],
+            "src/stories/register.stories.ts": [
+                {
+                    "name": "register",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/stories/register.stories.ts",
+                    "type": "",
+                    "defaultValue": "Template.bind({})"
+                },
+                {
+                    "name": "RegisterError",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/stories/register.stories.ts",
+                    "type": "",
+                    "defaultValue": "Template.bind({})"
+                },
+                {
+                    "name": "Template",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/stories/register.stories.ts",
+                    "type": "Story<RegisterComponent>",
+                    "defaultValue": "(args: RegisterComponent) => ({\r\n  component: RegisterComponent,\r\n  props: args\r\n})"
+                }
+            ],
+            "src/app/Register_user/store/register-actions.ts": [
+                {
+                    "name": "register",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/Register_user/store/register-actions.ts",
+                    "type": "",
+                    "defaultValue": "createAction('[Auth] Register', props<{ user: RegisterUser }>())"
+                },
+                {
+                    "name": "registerFailure",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/Register_user/store/register-actions.ts",
+                    "type": "",
+                    "defaultValue": "createAction('[Auth] Register Failure', props<{error}>())"
+                },
+                {
+                    "name": "registerSuccess",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/Register_user/store/register-actions.ts",
+                    "type": "",
+                    "defaultValue": "createAction('[Auth] Register Success', props<{accessToken}>())"
+                }
+            ]
+        },
+        "groupedFunctions": {},
+        "groupedEnumerations": {},
+        "groupedTypeAliases": {}
+    },
+    "routes": [],
+    "coverage": {
+        "count": 0,
+        "status": "low",
+        "files": [
+            {
+                "filePath": "e2e/src/app.po.ts",
+                "type": "class",
+                "linktype": "classe",
+                "name": "AppPage",
+                "coveragePercent": 0,
+                "coverageCount": "0/3",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/Login_user/login/login.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "LoginComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/9",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/Login_user/store/login-actions.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "login",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/Login_user/store/login-actions.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "loginFailure",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/Login_user/store/login-actions.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "loginSuccess",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/Login_user/store/login-effects.ts",
+                "type": "injectable",
+                "linktype": "injectable",
+                "name": "UserEffects",
+                "coveragePercent": 0,
+                "coverageCount": "0/3",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/Login_user/store/login-reducer.ts",
+                "type": "interface",
+                "linktype": "interface",
+                "name": "AuthState",
+                "coveragePercent": 0,
+                "coverageCount": "0/4",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/Login_user/store/login-reducer.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "initialState",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/Login_user/store/login-reducer.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "userReducer",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/Login_user/store/login-selector.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "authSelector",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/Login_user/store/login-selector.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "getAuthReferenceState",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/Register_user/register/register.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "RegisterComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/10",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/Register_user/store/register-actions.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "register",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/Register_user/store/register-actions.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "registerFailure",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/Register_user/store/register-actions.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "registerSuccess",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/Register_user/store/register-effects.ts",
+                "type": "injectable",
+                "linktype": "injectable",
+                "name": "RegisterEffects",
+                "coveragePercent": 0,
+                "coverageCount": "0/3",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/Register_user/store/register-reducer.ts",
+                "type": "interface",
+                "linktype": "interface",
+                "name": "RegisterState",
+                "coveragePercent": 0,
+                "coverageCount": "0/5",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/Register_user/store/register-reducer.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "initialState",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/Register_user/store/register-reducer.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "registerReducer",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/Register_user/store/register-selector.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "getRegisterReferenceState",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/Register_user/store/register-selector.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "registerSelector",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/app-routing.module.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "AppRoutingModule",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/app-routing.module.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "linksModule",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/app-routing.module.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "loginModule",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/app-routing.module.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "registerModule",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/app.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "AppComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/2",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/header/header.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "HeaderComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/7",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/links/add-new-link/add-new-link.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "AddNewLinkComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/9",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/links/links.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "LinksComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/6",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/links/store/links-actions.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "addLink",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/links/store/links-actions.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "deleteLink",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/links/store/links-actions.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "linkActionTypes",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/links/store/links-actions.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "linkLoaded",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/links/store/links-actions.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "linksLoaded",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/links/store/links-actions.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "loadLink",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/links/store/links-actions.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "loadLinks",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/links/store/links-actions.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "updateLink",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/links/store/links-effects.ts",
+                "type": "injectable",
+                "linktype": "injectable",
+                "name": "LinkEffects",
+                "coveragePercent": 0,
+                "coverageCount": "0/7",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/links/store/links-reducer.ts",
+                "type": "interface",
+                "linktype": "interface",
+                "name": "LinkState",
+                "coveragePercent": 0,
+                "coverageCount": "0/3",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/links/store/links-reducer.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "adapter",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/links/store/links-reducer.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "initialState",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/links/store/links-reducer.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "linkReducer",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/links/store/links-reducer.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/links/store/links.selector.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "getAllLinksList",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/links/store/links.selector.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "getCurrentLinkId",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/links/store/links.selector.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "getLinkDetails",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/links/store/links.selector.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "linksFeatureSelector",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/models/link.ts",
+                "type": "class",
+                "linktype": "classe",
+                "name": "Link",
+                "coveragePercent": 0,
+                "coverageCount": "0/6",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/models/login.ts",
+                "type": "class",
+                "linktype": "classe",
+                "name": "User",
+                "coveragePercent": 0,
+                "coverageCount": "0/3",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/models/register.ts",
+                "type": "class",
+                "linktype": "classe",
+                "name": "RegisterUser",
+                "coveragePercent": 0,
+                "coverageCount": "0/5",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/services/authguard.service.ts",
+                "type": "guard",
+                "linktype": "guard",
+                "name": "AuthguardService",
+                "coveragePercent": 0,
+                "coverageCount": "0/4",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/services/links.service.ts",
+                "type": "injectable",
+                "linktype": "injectable",
+                "name": "LinksService",
+                "coveragePercent": 0,
+                "coverageCount": "0/7",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/services/login.service.ts",
+                "type": "injectable",
+                "linktype": "injectable",
+                "name": "LoginService",
+                "coveragePercent": 0,
+                "coverageCount": "0/3",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/services/register.service.ts",
+                "type": "injectable",
+                "linktype": "injectable",
+                "name": "RegisterService",
+                "coveragePercent": 0,
+                "coverageCount": "0/3",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/services/theme.service.ts",
+                "type": "injectable",
+                "linktype": "injectable",
+                "name": "ThemeService",
+                "coveragePercent": 0,
+                "coverageCount": "0/4",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/services/theme.service.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "darkTheme",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/services/theme.service.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "lightTheme",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/environments/environment.prod.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "environment",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/environments/environment.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "environment",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/stories/addnewlink.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "add",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/stories/addnewlink.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "edit",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/stories/addnewlink.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "linkList",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/stories/addnewlink.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "Template",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/stories/app.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "Default",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/stories/app.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "linksModule",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/stories/app.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "loginModule",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/stories/app.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "registerModule",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/stories/app.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "Template",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/stories/header.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "Default",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/stories/header.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "Template",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/stories/links.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "Default",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/stories/links.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "linksList",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/stories/links.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "Template",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/stories/login.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "login",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/stories/login.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "LoginError",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/stories/login.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "Template",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/stories/register.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "register",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/stories/register.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "RegisterError",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/stories/register.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "Template",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/test.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "mock",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            }
+        ]
+    }
+}
